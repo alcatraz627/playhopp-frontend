@@ -3,15 +3,18 @@ const routes = {
 
     toys: '/toys',
     toy: id => `/toys/${id}`,
-    plans: '/plans',
+    subscribe: '/subscribe',
 
     contact: '/contact',
     blog: '/blog',
+    reviews: '/reviews',
+    faq: '/faq',
 
     // auth: 'auth',
     login: '/login',
     signup: '/signup',
     profile: '/profile',
+    logout: '/logout',
 }
 
 export default routes

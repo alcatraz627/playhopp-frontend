@@ -11,10 +11,13 @@ import theme from '../styles/theme';
 import routes from '../constants/routes';
 
 import Navbar from './Navbar';
+import Footer from './Footer';
 import HomePage from './HomePage';
 
 import Collection from './Collection';
-import Plans from './Plans';
+import Subscribe from './Subscribe';
+import Reviews from './Reviews';
+import FAQ from './FAQ';
 
 import Contact from './Contact';
 
@@ -22,11 +25,14 @@ import Login from './Login';
 import Signup from './Signup';
 
 
+
 const routeList = [
     { route: routes.toys, Component: Collection },
-    { route: routes.plans, Component: Plans },
+    { route: routes.subscribe, Component: Subscribe },
 
     { route: routes.contact, Component: Contact },
+    { route: routes.reviews, Component: Reviews },
+    { route: routes.faq, Component: FAQ },
 
     { route: routes.signup, Component: Signup },
     { route: routes.login, Component: Login },
@@ -55,6 +61,7 @@ const App = (props) => {
                 <Switch>
                     {routeList.map(({ route, Component }) => <Route key={route} path={route} component={Component} />)}
                 </Switch>
+                <Footer />
             </Router>
         </MuiThemeProvider>
     )

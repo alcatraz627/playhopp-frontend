@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Plans = props => {
+const FAQ = props => {
     return (<div>
-        Plans
+        FAQ
     </div>)
 }
 
-export default Plans
+export default FAQ

@@ -4,6 +4,10 @@ body {
     margin: 0;
 }
 
+body {
+    overflow-x: hidden;
+}
+
 // .center {
 //     text-align: center;
 // }
@@ -11,4 +15,9 @@ body {
 
 [hidden] {
     display: none;
-}
+};
+
+// @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css');
+// @import url('https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css');
+// @import './slick/slick.min.css';
+// @import './slick/slick-theme.min.css';

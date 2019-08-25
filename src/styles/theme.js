@@ -12,7 +12,19 @@ let theme = createMuiTheme({
         },
         secondary: {
             main: '#f5cf48',
+            // contrastText: '#333'
         },
+        text: {
+            primary: '#454545',
+        }
+    },
+    overrides: {
+        MuiTypography: {
+            root: {
+                color: '#454545',
+            //     textDecoration: 'none',
+            }
+        }
     }
 })
 

@@ -46,12 +46,15 @@ module.exports = {
         publicPath: '/',
         filename: 'bundle.js'
     },
+    devtool: "source-map",
     devServer: {
         disableHostCheck: true,
         contentBase: './dist',
+        overlay: true,
         hot: true,
         port: 9000,
         compress: true,
         historyApiFallback: true,
+        progress: true,
     }
 }
