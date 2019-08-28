@@ -34,7 +34,6 @@ const toy2 = createToy({
     title: 'Wooden Pretend Cooking Set',
     brief: 'Perfect miniature cooking set for your perfect little chef!',
     description: "Perfect miniature cooking set for your perfect little chef! A toy cooking set that mimics the kitchen. Bright and colorful. Finely crafted pot and pan with a lid, plate and bowl, spoon, ladle, and fruits and vegetables can be used as teaching props for nutrition and kitchen safety.",
-    "proddeschead2": "Skills it will build",
     skills: '16 piece set builds fine motor and spatial skills. Multiple props spark creativity and innovation.',
     playIdeas: 'Play alone or develop social skills with friends. Let the little one serve up a feast using the kitchen set.',
     brand: 'Shumee',

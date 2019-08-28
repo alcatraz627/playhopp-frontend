@@ -46,7 +46,7 @@ const Footer = props => {
                             </ListItem>)}
                     </List>
                 </Grid>
-                <Grid item md={2} s>
+                <Grid item md={2}>
                     <List>
                         {["Contact Us", "Blog", "Careers", "Our Mission"].map(e =>
                             <ListItem key={e}>
