@@ -1,12 +1,17 @@
 import {combineReducers} from 'redux';
-import {UPDATE_COUNTER} from '../actions/actionTypes';
-import counter from './counter';
-import toys from './toys';
 
-const rootReducer = combineReducers({
+import api from './api';
+import toys from './toys';
+import brands from './brands';
+import categories from './categories';
+
+const rootReducer = () => combineReducers({
     // counter: counterReducer
-    counter,
-    toys
+    api,
+    toys,
+    brands,
+    categories,
+
 })
 
 // console.log(counterReducer());

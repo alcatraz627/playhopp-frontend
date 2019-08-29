@@ -1,7 +1,10 @@
 import {createAction} from 'redux-starter-kit';
 
-export const UPDATE_COUNTER = createAction('counter/update')
+export const API_CALL = createAction('api/call')
+export const API_RESPONSE = createAction('api/response')
 
-export const FETCH_DATA = createAction('data/fetch')
+export const ADD_TOY = createAction('toy/add/single')
+export const ADD_TOYS = createAction('toy/add/collection')
 
-export const ADD_TOY = createAction('toy/add')
+export const ADD_BRANDS = createAction('brand/add/collection')
+export const ADD_CATEGORIES = createAction('category/add/collection')

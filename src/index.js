@@ -23,7 +23,6 @@ const render = () => ReactDOM.render(
 
 render()
 
-console.log('hot', module.hot)
 if (module.hot) {
     module.hot.accept('./components/App', () => { render() });
     // module.hot.accept('./redux/reducers', () => { store.replaceReducer(require('./redux/reducers/index')) });
