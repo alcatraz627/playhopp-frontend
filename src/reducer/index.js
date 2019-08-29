@@ -4,6 +4,7 @@ import api from './api';
 import toys from './toys';
 import brands from './brands';
 import categories from './categories';
+import cart from './cart';
 
 const rootReducer = () => combineReducers({
     // counter: counterReducer
@@ -11,6 +12,7 @@ const rootReducer = () => combineReducers({
     toys,
     brands,
     categories,
+    cart,
 
 })
 

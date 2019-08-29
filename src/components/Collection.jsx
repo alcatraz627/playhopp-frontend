@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { connect } from 'react-redux'
 
-import { addToys, apiCall } from '../actions'
+import { apiCall, cartAdd, cartRemove } from '../actions'
 import { apiRoutes, API_DATA_TYPE, API_STATES } from '../constants/api'
 
 import { Grid, Card, CardContent, CardHeader, CardMedia, CardActionArea, CardActions, Container, Divider, Avatar, Button, Typography, Icon, Chip, TextField, InputAdornment } from '@material-ui/core'
@@ -52,6 +52,12 @@ const useStyles = makeStyles(theme => ({
 const Collection = props => {
     const classes = useStyles()
 
+    useEffect(() => {
+        (props.apiStatus[API_DATA_TYPE.BRANDS] == API_STATES.FETCHED) &&
+            (props.apiStatus[API_DATA_TYPE.CATEGORIES] == API_STATES.FETCHED) &&
+            (props.apiStatus[API_DATA_TYPE.TOYS] == API_STATES.NOT_FETCHED) && props.fetchToys()
+    }, [props.apiStatus])
+
     const [hoverCard, setHoverCard] = useState(null)
 
     const handleMouseOver = (e) => (event) => {
@@ -68,10 +74,6 @@ const Collection = props => {
     return (
         <Container className={classes.root}>
             <Typography variant="h4">Browse Toys</Typography>
-            <pre>
-                {JSON.stringify(props.state)}
-            </pre>
-            <Button onClick={() => { props.fetchToys() }}>Fetch Toys</Button>
             <Grid container style={{ margin: '30px 0' }}>
                 <Grid item>
                     <TextField variant="standard" color="primary" placeholder="Search" InputProps={{ startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment> }} />
@@ -101,7 +103,7 @@ const Collection = props => {
                             </CardContent>
                             <Divider />
                             <CardActions className={classes.cardAction}>
-                                <Button color="primary"><Icon>library_add</Icon>&nbsp;Add to Cart</Button>
+                                <Button color="primary" onClick={()=>{props.addToCart(e.id)}}><Icon>library_add</Icon>&nbsp;Add to Cart</Button>
                                 <Button variant="text">Learn More</Button>
                             </CardActions>
                         </Card>
@@ -117,11 +119,15 @@ const mapStateToProps = (state, ownProps) => ({
     apiStatus: state.api,
     brands: state.brands,
     categories: state.categories,
-    state: state
+    cart: state.cart,
+
+    state: state,
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-    fetchToys: () => dispatch(apiCall({ route: apiRoutes.TOYS(), dataType: API_DATA_TYPE.TOYS }))
+    fetchToys: () => dispatch(apiCall({ route: apiRoutes.TOYS(), dataType: API_DATA_TYPE.TOYS })),
+    addToCart: item => dispatch(cartAdd({item})),
+    removeFromCart: item => dispatch(cartRemove({item})),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Collection)

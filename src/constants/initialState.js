@@ -14,6 +14,8 @@ const initialState = {
 
     [API_DATA_TYPE.BRANDS]: {},
     [API_DATA_TYPE.CATEGORIES]: {},
+
+    cart: {}
 };
 
 export default initialState;

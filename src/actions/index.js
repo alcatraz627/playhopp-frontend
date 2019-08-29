@@ -1,6 +1,9 @@
 import * as actionTypes from './actionTypes';
 export { actionTypes };
 
+export const cartAdd = ({item}) => actionTypes.CART_ADD({item})
+export const cartRemove = ({item}) => actionTypes.CART_REMOVE({item})
+
 export const apiCall = ({route, dataType}) => actionTypes.API_CALL({route, dataType})
 export const apiResponse = ({dataType, responseType}) => actionTypes.API_CALL({dataType, responseType})
 
