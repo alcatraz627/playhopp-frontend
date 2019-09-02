@@ -6,7 +6,10 @@ import initialState from './constants/initialState';
 import createRootReducer from './reducer';
 import createSagaMiddleWare from 'redux-saga';
 import rootSaga from './sagas'
+import {createBrowserHistory} from 'history'
 // console.log(reducer);
+
+export const history = createBrowserHistory()
 
 export const sagaMiddleWare = createSagaMiddleWare()
 

@@ -1,10 +1,14 @@
 import * as actionTypes from './actionTypes';
+import { API_METHODS } from '../constants/api';
 export { actionTypes };
 
 export const cartAdd = ({item}) => actionTypes.CART_ADD({item})
 export const cartRemove = ({item}) => actionTypes.CART_REMOVE({item})
 
-export const apiCall = ({route, dataType}) => actionTypes.API_CALL({route, dataType})
+export const toggleDrawer = ({open}) => actionTypes.TOGGLE_DRAWER({open})
+export const setNotif = ({message}) => actionTypes.SET_NOTIF({message})
+
+export const apiCall = (params) => actionTypes.API_CALL(params)
 export const apiResponse = ({dataType, responseType}) => actionTypes.API_CALL({dataType, responseType})
 
 export const addToys = data => actionTypes.ADD_TOYS({data})
@@ -13,9 +17,8 @@ export const addToy = data => actionTypes.ADD_TOY({data})
 export const addBrands = data => actionTypes.ADD_BRANDS({data})
 export const addCategories = data => actionTypes.ADD_CATEGORIES({data})
 
+export const loginSuccess = data => actionTypes.LOGIN_SUCCESS({data})
+export const loginFail = data => actionTypes.LOGIN_FAIL({data})
 
-
-// export const updateCounter = counter => ({
-//     type: UPDATE_COUNTER,
-//     payload: {counter}
-// })
+export const registerSuccess = data => actionTypes.REGISTER_SUCCESS({data})
+export const registerFail = data => actionTypes.REGISTER_FAIL({data})

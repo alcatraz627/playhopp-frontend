@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import logo from '../../assets/logoNavbar.png'
 
-import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem } from '@material-ui/core'
+import { connect } from 'react-redux'
+import { toggleDrawer } from '../../actions'
+
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Badge } from '@material-ui/core'
 import { AccountCircle, ShoppingBasket } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
-import routes from '../constants/routes';
+import logo from '../../../assets/logoNavbar.png'
+import routes from '../../constants/routes';
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -99,12 +102,14 @@ const Navbar = props => {
                 <IconButton color="inherit" onClick={handleMenuOpen}>
                     <AccountCircle />
                 </IconButton>
-                <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose}
+                <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose} onClick={handleMenuClose}
                     transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-                    {navLinks.auth.guest.map(e => <MenuItem key={e.route}><Link className={classes.menuLink} to={e.route}>{e.title}</Link></MenuItem>)}
+                    {navLinks.auth.guest.map(e => <Link className={classes.menuLink} to={e.route} key={e.route}><MenuItem>{e.title}</MenuItem></Link>)}
                 </Menu>
-                <IconButton color="inherit">
-                    <ShoppingBasket />
+                <IconButton color="inherit" onClick={() => { props.toggleDrawer(true) }}>
+                    <Badge invisible={props.cartLength == 0} color="secondary" badgeContent={props.cartLength}>
+                        <ShoppingBasket />
+                    </Badge>
                 </IconButton>
                 <div className={classes.grow} />
             </Toolbar>
@@ -112,4 +117,13 @@ const Navbar = props => {
     )
 }
 
-export default Navbar
+const mapStateToProps = (state, ownProps) => ({
+    isDrawerOpen: state.general.isCartOpen,
+    cartLength: Object.keys(state.cart).length,
+})
+
+const mapDispatchToProps = (dispatch, ownProps) => ({
+    toggleDrawer: (open) => dispatch(toggleDrawer({ open }))
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Navbar)

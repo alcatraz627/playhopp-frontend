@@ -1,4 +1,5 @@
-[ ] Redux Saga
-[ ] Material Design(?)
-[ ] Auth
+[ ] Store Token in LocalStorage
+[ ] Register
+[ ] Save cart to localstorage/backend
+[ ] Add error/success to notif
 ...

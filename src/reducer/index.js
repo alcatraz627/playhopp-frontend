@@ -5,6 +5,8 @@ import toys from './toys';
 import brands from './brands';
 import categories from './categories';
 import cart from './cart';
+import general from './general';
+import user from './user';
 
 const rootReducer = () => combineReducers({
     // counter: counterReducer
@@ -13,6 +15,8 @@ const rootReducer = () => combineReducers({
     brands,
     categories,
     cart,
+    general,
+    user,
 
 })
 

@@ -2,66 +2,59 @@ import React, { useState } from 'react'
 // import _ from 'lodash'
 
 // import { connect } from 'react-redux';
-// import { updateCounter } from '../actions';
 
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+// Using Router instead of BrowserRouter because of custom implementation
+// of history instance for use with redux-saga
+import { Router, Route, Switch } from 'react-router-dom';
 
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from '../styles/theme';
 import routes from '../constants/routes';
 
-import Navbar from './Navbar';
-import Footer from './Footer';
+import Navbar from './Structure/Navbar';
+import Footer from './Static/Footer';
+import Drawer from './Structure/Drawer';
 import HomePage from './HomePage';
 
 import Collection from './Collection';
 import Subscribe from './Subscribe';
-import Reviews from './Reviews';
-import FAQ from './FAQ';
+import PlaceOrder from './PlaceOrder';
 
-import Contact from './Contact';
+import Reviews from './Static/Reviews';
+import FAQ from './Static/FAQ';
+import Contact from './Static/Contact';
 
-import Login from './Login';
-import Signup from './Signup';
+import AuthComponent from './AuthComponent';
+import NotifBar from './shared/NotifBar';
 
-
+import { history } from '../store'
 
 const routeList = [
     { route: routes.toys, Component: Collection },
     { route: routes.subscribe, Component: Subscribe },
+    { route: routes.placeorder, Component: PlaceOrder },
 
     { route: routes.contact, Component: Contact },
     { route: routes.reviews, Component: Reviews },
     { route: routes.faq, Component: FAQ },
 
-    { route: routes.signup, Component: Signup },
-    { route: routes.login, Component: Login },
+    { route: routes.signup, Component: AuthComponent },
+    { route: routes.login, Component: AuthComponent },
 
     { route: routes.homepage, Component: HomePage },
 ]
 
 const App = (props) => {
-    // let { counter, updateCounter } = props;
-
-    // const decrement = () => {
-    //     updateCounter(counter - 1)
-    // }
-
-    // const increment = () => {
-    //     updateCounter(counter + 1)
-    // }
-    //     <button onClick={decrement}>-</button>
-    //     {counter}
-    // <button onClick={increment}>+</button>
-
     return (
         <MuiThemeProvider theme={theme}>
-            <Router>
+            <Router history={history}>
                 <Navbar />
+                <Drawer />
                 <Switch>
                     {routeList.map(({ route, Component }) => <Route key={route} path={route} component={Component} />)}
                 </Switch>
                 <Footer />
+                <NotifBar />
             </Router>
         </MuiThemeProvider>
     )

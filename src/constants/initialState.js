@@ -15,7 +15,17 @@ const initialState = {
     [API_DATA_TYPE.BRANDS]: {},
     [API_DATA_TYPE.CATEGORIES]: {},
 
-    cart: {}
+    cart: {},
+    general: {
+        isCartOpen: false
+    },
+    user: {
+        token: null,
+        username: null,
+        contact_number: null,
+        first_name: null,
+        address: null,
+    }
 };
 
 export default initialState;

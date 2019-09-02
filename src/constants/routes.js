@@ -4,6 +4,7 @@ const routes = {
     toys: '/toys',
     toy: id => `/toys/${id}`,
     subscribe: '/subscribe',
+    placeorder: '/placeorder',
 
     contact: '/contact',
     blog: '/blog',

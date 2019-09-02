@@ -4,7 +4,8 @@ import ReactDOM from 'react-dom'
 // import {hot} from 'react-hot-loader/root'
 
 import { Provider } from 'react-redux';
-import store from './store';
+import store, {sagaMiddleWare, sagaTask} from './store';
+
 
 import App from './components/App';
 
@@ -25,14 +26,14 @@ render()
 
 if (module.hot) {
     module.hot.accept('./components/App', () => { render() });
-    // module.hot.accept('./redux/reducers', () => { store.replaceReducer(require('./redux/reducers/index')) });
-    // module.hot.accept('./sagas', () => {
-    //     const getNewSagas = require('./sagas');
-    //     sagaTask.cancel()
-    //     sagaTask.done.then(() => {
-    //         sagaTask = sagaMiddleware.run(function* replacedSaga(action) {
-    //             yield getNewSagas()
-    //         })
-    //     })
-    // });
+    module.hot.accept('./reducer', () => { store.replaceReducer(require('./reducer/index')) });
+    module.hot.accept('./sagas', () => {
+        const getNewSagas = require('./sagas');
+        sagaTask.cancel()
+        sagaTask.done.then(() => {
+            sagaTask = sagaMiddleware.run(function* replacedSaga(action) {
+                yield getNewSagas()
+            })
+        })
+    });
 }

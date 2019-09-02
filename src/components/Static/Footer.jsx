@@ -4,7 +4,7 @@ import { Grid, Typography, List, ListItem } from '@material-ui/core'
 import { Link } from 'react-router-dom'
 import { makeStyles } from '@material-ui/core/styles'
 
-import logo from '../../assets/logo.png'
+import logo from '../../../assets/logo.png'
 
 const useStyles = makeStyles(theme => ({
     root: {
