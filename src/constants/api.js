@@ -1,16 +1,19 @@
 import * as actions from '../actions'
 
+const h = window.location.hostname
+const p = '8000'
+
 export const apiRoutes = {
-    TOYS: () => `//localhost:8000/toys/`,
-    TOY: (id) => `//localhost:8000/toys/${id}/`,
+    TOYS: () => `//${h}:${p}/toys/`,
+    TOY: (id) => `//${h}:${p}/toys/${id}/`,
 
-    BRANDS: () => `//localhost:8000/brands/`,
-    CATEGORIES: () => `//localhost:8000/categories/`,
+    BRANDS: () => `//${h}:${p}/brands/`,
+    CATEGORIES: () => `//${h}:${p}/categories/`,
 
-    PROFILE: (username) => `//localhost:8000/customers/${username}/`,
+    PROFILE: (username) => `//${h}:${p}/customers/${username}/`,
 
-    SIGNUP: () => `//localhost:8000/customers/`,
-    LOGIN: () => `//localhost:8000/token_login/`,
+    SIGNUP: () => `//${h}:${p}/customers/`,
+    LOGIN: () => `//${h}:${p}/token_login/`,
 }
 
 export const API_METHODS = {
