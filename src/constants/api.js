@@ -4,16 +4,16 @@ let apiUrl = `http://35.154.205.76/api`
 
 
 export const apiRoutes = {
-    TOYS: () => `//${apiUrl}/toys/`,
-    TOY: (id) => `//${apiUrl}/toys/${id}/`,
+    TOYS: () => `${apiUrl}/toys/`,
+    TOY: (id) => `${apiUrl}/toys/${id}/`,
 
-    BRANDS: () => `//${apiUrl}/brands/`,
-    CATEGORIES: () => `//${apiUrl}/categories/`,
+    BRANDS: () => `${apiUrl}/brands/`,
+    CATEGORIES: () => `${apiUrl}/categories/`,
 
-    PROFILE: (username) => `//${apiUrl}/customers/${username}/`,
+    PROFILE: (username) => `${apiUrl}/customers/${username}/`,
 
-    SIGNUP: () => `//${apiUrl}/customers/`,
-    LOGIN: () => `//${apiUrl}/token_login/`,
+    SIGNUP: () => `${apiUrl}/customers/`,
+    LOGIN: () => `${apiUrl}/token_login/`,
 }
 
 export const API_METHODS = {
