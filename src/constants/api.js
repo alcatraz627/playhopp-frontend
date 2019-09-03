@@ -1,6 +1,6 @@
 import * as actions from '../actions'
 
-let apiUrl = process.env.API_URL
+let apiUrl = `http://35.154.205.76/api`
 
 
 export const apiRoutes = {

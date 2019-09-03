@@ -1,8 +1,8 @@
 const routes = {
     homepage: '/',
 
-    toys: '/toys',
-    toy: id => `/toys/${id}`,
+    toys: '/collection',
+    toy: id => `/collection/${id}`,
     subscribe: '/subscribe',
     placeorder: '/placeorder',
 
