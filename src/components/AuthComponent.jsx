@@ -74,7 +74,7 @@ const KEY_DETAILS = {
 const AuthComponent = props => {
     const classes = useStyles()
 
-    let { attempthLogin } = props
+    let { attemptLogin, attemptSignup } = props
 
     const [isRegister, setRegister] = useState(props.location.pathname == routes.signup)
 
@@ -93,18 +93,15 @@ const AuthComponent = props => {
 
     const handleSubmit = e => {
         e.preventDefault()
-        setInvalid(Object.assign({}, ...Object.values(keysForForm).map(e => ({ [e]: !KEY_DETAILS[e].validator(details[e], details) }))))
+        setInvalid(Object.assign({}, ...Object.values(keysForForm).map(e => ({ [e]: !KEY_DETAILS[e].validator(details[e], details) }))));
         // console.log(details, KEYS)
         // console.log(details[KEYS.CONFIRM_PASSWORD], details[KEYS.PASSWORD], details[KEYS.CONFIRM_PASSWORD] == details[KEYS.PASSWORD])
-        attempthLogin(details)
+        ; (isRegister ? attemptSignup : attemptLogin)(details)
     }
 
 
     return (
         <Container maxWidth="sm" className={classes.root}>
-
-            {JSON.stringify(details)}
-            {JSON.stringify(props.location.pathname)} {isRegister ? 1 : 2}
 
             <Paper elevation={0} className={classes.paper}>
                 <form onSubmit={handleSubmit}>
@@ -135,7 +132,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
     // fetchToys: () => dispatch(apiCall({ route: apiRoutes.TOYS(), dataType: API_DATA_TYPE.TOYS, method: API_METHODS.POST })),
-    attempthLogin: (data) => dispatch(apiCall({ route: apiRoutes.LOGIN(), dataType: API_DATA_TYPE.LOGIN, method: API_METHODS.POST, data })),
+    attemptLogin: (data) => dispatch(apiCall({ route: apiRoutes.LOGIN(), dataType: API_DATA_TYPE.LOGIN, method: API_METHODS.POST, data })),
+    attemptSignup: (data) => dispatch(apiCall({ route: apiRoutes.SIGNUP(), dataType: API_DATA_TYPE.SIGNUP, method: API_METHODS.POST, data })),
 
 })
 

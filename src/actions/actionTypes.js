@@ -21,10 +21,10 @@ export const ADD_TOYS = createAction('toy/add/collection')
 export const ADD_BRANDS = createAction('brand/add/collection')
 export const ADD_CATEGORIES = createAction('category/add/collection')
 
-export const GET_USER = createAction('user/get')
+export const SET_USER = createAction('user/set')
 
 export const LOGIN_SUCCESS = createAction('auth/login/success')
 export const LOGIN_FAIL = createAction('auth/login/fail')
 
-export const REGISTER_SUCCESS = createAction('auth/register/success')
-export const REGISTER_FAIL = createAction('auth/register/fail')
+export const SIGNUP_SUCCESS = createAction('auth/signup/success')
+export const SIGNUP_FAIL = createAction('auth/signup/fail')

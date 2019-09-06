@@ -3,20 +3,33 @@ import { connect } from 'react-redux'
 
 import { Button, Chip, Avatar, Icon } from '@material-ui/core'
 import { red } from '@material-ui/core/colors'
+import { makeStyles } from '@material-ui/core/styles'
 
 import { cartAdd, cartRemove } from '../../actions'
 
+const useStyles = makeStyles(theme => ({
+    avatar: {
+        backgroundColor: theme.palette.primary.main,
+        // width: '20px',
+        // height: '20px',
+        transform: 'scale(0.8)'
+    }
+}))
+
 const CartAddButton = props => {
+    const classes = useStyles()
+
     const { isInCart, toyId, onlyButton = false } = props
     const { addToCart, removeFromCart } = props
 
     return isInCart ?
         <>
             {!onlyButton && <Chip variant="outlined" color="primary" label="Added to cart" avatar={<Avatar><Icon>shopping_cart</Icon></Avatar>} />}
+            {onlyButton && <Avatar className={classes.avatar}><Icon color="default" fontSize="small">shopping_cart</Icon></Avatar>}
             <Button variant="outlined" color="secondary" onClick={() => { removeFromCart(toyId) }}
-                // style={{ color: red[500], borderColor: red[500] }}
+            // style={{ color: red[500], borderColor: red[500] }}
             >
-                <Icon>remove_shopping</Icon>&nbsp;Remove from Hopplist</Button>
+                <Icon>remove_shopping</Icon>&nbsp;Remove</Button>
         </>
         :
         <Button color="primary" onClick={() => { addToCart(toyId) }}><Icon>library_add</Icon>&nbsp;Add to Hopplist</Button>

@@ -74,7 +74,10 @@ const navLinks = {
 const Navbar = props => {
     const classes = useStyles();
 
-    const [anchorEl, setAnchorEl] = useState(null);
+    const { cartLength, user } = props
+    const { toggleDrawer } = props
+
+    const [anchorEl, setAnchorEl] = useState(null)
     const [elevation, setElevation] = useState(0)
     const handleMenuOpen = event => { setAnchorEl(event.currentTarget) };
     const handleMenuClose = () => { setAnchorEl(null) };
@@ -104,10 +107,10 @@ const Navbar = props => {
                 </IconButton>
                 <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose} onClick={handleMenuClose}
                     transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-                    {navLinks.auth.guest.map(e => <Link className={classes.menuLink} to={e.route} key={e.route}><MenuItem>{e.title}</MenuItem></Link>)}
+                    {navLinks.auth[user.token?'user':'guest'].map(e => <Link className={classes.menuLink} to={e.route} key={e.route}><MenuItem>{e.title}</MenuItem></Link>)}
                 </Menu>
-                <IconButton color="inherit" onClick={() => { props.toggleDrawer(true) }}>
-                    <Badge invisible={props.cartLength == 0} color="secondary" badgeContent={props.cartLength}>
+                <IconButton color="inherit" onClick={() => { toggleDrawer(true) }}>
+                    <Badge invisible={cartLength == 0} color="secondary" badgeContent={cartLength}>
                         <ShoppingBasket />
                     </Badge>
                 </IconButton>
@@ -118,8 +121,9 @@ const Navbar = props => {
 }
 
 const mapStateToProps = (state, ownProps) => ({
-    isDrawerOpen: state.general.isCartOpen,
+    // isDrawerOpen: state.general.isCartOpen,
     cartLength: Object.keys(state.cart).length,
+    user: state.user
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

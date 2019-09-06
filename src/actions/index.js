@@ -8,6 +8,8 @@ export const cartRemove = ({item}) => actionTypes.CART_REMOVE({item})
 export const toggleDrawer = ({open}) => actionTypes.TOGGLE_DRAWER({open})
 export const setNotif = ({message}) => actionTypes.SET_NOTIF({message})
 
+export const setUser = (data) => actionTypes.SET_USER({data})
+
 export const apiCall = (params) => actionTypes.API_CALL(params)
 export const apiResponse = ({dataType, responseType}) => actionTypes.API_CALL({dataType, responseType})
 
@@ -20,5 +22,5 @@ export const addCategories = data => actionTypes.ADD_CATEGORIES({data})
 export const loginSuccess = data => actionTypes.LOGIN_SUCCESS({data})
 export const loginFail = data => actionTypes.LOGIN_FAIL({data})
 
-export const registerSuccess = data => actionTypes.REGISTER_SUCCESS({data})
-export const registerFail = data => actionTypes.REGISTER_FAIL({data})
+export const signupSuccess = data => actionTypes.SIGNUP_SUCCESS({data})
+export const signupFail = data => actionTypes.SIGNUP_FAIL({data})

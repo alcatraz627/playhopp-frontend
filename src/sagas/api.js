@@ -63,8 +63,11 @@ export function* apiCall({ payload: { route, dataType, method, data } }) {
         case apiRoutes.LOGIN():
             yield put(((responseType == API_STATES.FETCHED) ? actionTypes.LOGIN_SUCCESS : actionTypes.LOGIN_FAIL)({...resp.data}))
             break;
+        case apiRoutes.SIGNUP():
+            yield put(((responseType == API_STATES.FETCHED) ? actionTypes.SIGNUP_SUCCESS : actionTypes.SIGNUP_FAIL)({...resp.data}))
+            break;
         default:
-            yield put(API_DATA_TYPE_REDUCER[route, dataType](resp.data))
+        yield put(API_DATA_TYPE_REDUCER[route, dataType](resp.data))
             break;
     }
 

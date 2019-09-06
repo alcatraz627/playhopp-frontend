@@ -33,8 +33,8 @@ const useStyles = makeStyles(theme => ({
         padding: '20px',
     },
     card: {
-        maxWidth: 500,
-        minWidth: 380,
+        maxWidth: 400,
+        minWidth: 300,
         height: '100%',
         // margin: '10px auto',
         margin: 'auto'
@@ -143,7 +143,7 @@ const Collection = props => {
                 </Grid>
 
                 {Object.values(props.toys).map(e => (
-                    <Grid key={e.id} item xs={12} sm={12} md={6} lg={4} className={classes.cardContainer}>
+                    <Grid key={e.id} item xs={12} sm={12} md={4} lg={3} className={classes.cardContainer}>
                         <Card className={classes.card} onMouseOut={handleMouseOut} onMouseOver={handleMouseOver(e)} elevation={hoverCard == e.id ? 2 : 0}>
                             <CardMedia className={classes.cardMedia} image={e.primaryImage} title={e.title} />
                             <Divider />
