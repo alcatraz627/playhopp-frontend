@@ -16,6 +16,8 @@ const routes = {
     signup: '/signup',
     profile: '/profile',
     logout: '/logout',
+
+    admin: '/admin',
 }
 
 export default routes

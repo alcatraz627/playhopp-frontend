@@ -4,15 +4,17 @@ import { apiRoutes, API_DATA_TYPE, API_METHODS } from '../constants/api'
 
 import api from './api'
 import user from './user'
+import cart from './cart'
 
 import { getToken } from './_helper'
 
+// To run on init
 function* boot() {
     yield put(actionTypes.API_CALL({ route: apiRoutes.BRANDS(), dataType: API_DATA_TYPE.BRANDS }))
     yield put(actionTypes.API_CALL({ route: apiRoutes.CATEGORIES(), dataType: API_DATA_TYPE.CATEGORIES }))
-    yield put(actionTypes.API_CALL({ route: apiRoutes.TOYS(), dataType: API_DATA_TYPE.TOYS }))
+    // yield put(actionTypes.API_CALL({ route: apiRoutes.TOYS(), dataType: API_DATA_TYPE.TOYS }))
 
-    yield put(actionTypes.SET_NOTIF({ message: "Henlo" }))
+    // yield put(actionTypes.SET_NOTIF({ message: "Henlo" }))
 
     let t = getToken()
     console.log('token', t)
@@ -26,5 +28,6 @@ export default function* root() {
         fork(boot),
         fork(api),
         fork(user),
+        fork(cart),
     ])
 }

@@ -1,7 +1,7 @@
 import * as actions from '../actions'
 
-// let apiUrl = `http://35.154.205.76/api`
-let apiUrl = `http://localhost:8000/api`
+let apiUrl = `http://35.154.205.76/api`
+// let apiUrl = `http://localhost:8000/api`
 
 
 export const apiRoutes = {
@@ -11,7 +11,8 @@ export const apiRoutes = {
     BRANDS: () => `${apiUrl}/brands/`,
     CATEGORIES: () => `${apiUrl}/categories/`,
 
-    PROFILE: (username) => `${apiUrl}/customers/${username}/`,
+    USERS: (username) => `${apiUrl}/customers/`,
+    USER: (username) => `${apiUrl}/customers/${username}/`,
     GET_USER: () => `${apiUrl}/customers/get_user/`,
 
     SIGNUP: () => `${apiUrl}/customers/`,
@@ -37,6 +38,7 @@ export const API_DATA_TYPE = {
     TOY: 'toy',
     TOYS: 'toys',
     USER: 'user',
+    USERS: 'users',
     LOGIN: 'login',
     SIGNUP: 'signup',
     BRANDS: 'brands',
@@ -49,6 +51,7 @@ export const API_DATA_TYPE_REDUCER = {
     [API_DATA_TYPE.BRANDS]: actions.addBrands,
     [API_DATA_TYPE.CATEGORIES]: actions.addCategories,
     [API_DATA_TYPE.USER]: actions.setUser,
+    [API_DATA_TYPE.USERS]: actions.setUsers,
 
     [API_DATA_TYPE.LOGIN]: actions.loginSuccess,
     [API_DATA_TYPE.SIGNUP]: actions.signupSuccess,

@@ -27,6 +27,7 @@ import Contact from './Static/Contact';
 import AuthComponent from './AuthComponent';
 import NotifBar from './shared/NotifBar';
 
+
 import { history } from '../store'
 
 const routeList = [
@@ -41,6 +42,8 @@ const routeList = [
     { route: routes.signup, Component: AuthComponent },
     { route: routes.login, Component: AuthComponent },
 
+
+    // Place all routes above this
     { route: routes.homepage, Component: HomePage },
 ]
 

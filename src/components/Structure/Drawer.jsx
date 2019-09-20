@@ -68,7 +68,7 @@ const Drawer = props => {
                 </List>
                 <Divider className={classes.dividerBottom} />
                 {/* <Button variant="contained" color="primary" disabled={props.cart.length < 10}>Proceed to Payment</Button> */}
-                <Link to={routes.placeorder}><Button variant="contained" color="primary" onClick={() => props.toggleDrawer(false)} disabled={props.cart.length == 0}>Proceed to Payment</Button></Link>
+                <Link to={routes.placeorder} style={{textDecoration: 'none'}}><Button variant="contained" color="primary" onClick={() => props.toggleDrawer(false)} disabled={props.cart.length < 10}>Proceed to Payment</Button></Link>
                 {(props.cart.length < 10) && <Typography variant="subtitle2" color="error">Please select {10 - props.cart.length} more items</Typography>}
             </div>
             {modalItem && <ToyModal toyId={modalItem} onClose={handleModalClose} />}

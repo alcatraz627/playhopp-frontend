@@ -64,6 +64,12 @@ module.exports = () => {
             compress: true,
             historyApiFallback: true,
             progress: true,
+            proxy: {
+                '/api': {
+                    target: 'http://localhost:8000',
+                    changeOrigin: true,
+                }
+            }
         }
     }
 }

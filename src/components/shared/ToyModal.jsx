@@ -26,9 +26,13 @@ const ToyModal = props => {
             <DialogContent>
                 <Grid container spacing={2}>
                     <Grid item sm={5}>
-                        <img src={toy.primaryImage} width="100%" />
+                        <img src={toy.primaryImage || "https://dummyimage.com/600x400/000333/0011ff"} width="100%" />
+                        <br />
+                        <br />
+                        <br />
                         <Typography variant="subtitle1">Ages: {toy.minAge} to {toy.maxAge}</Typography>
-                        <Chip label={category.title} />
+                        <Chip label={category} color="secondary" />&nbsp; &nbsp; &nbsp;
+                        <Chip label={`Number of Pieces: ${toy.piecesNumber}`} variant="outlined" />
                     </Grid>
                     <Grid item sm={7}>
                         <Typography variant="h4">{toy.title}</Typography>

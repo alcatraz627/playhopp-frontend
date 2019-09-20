@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 const CartAddButton = props => {
     const classes = useStyles()
 
-    const { isInCart, toyId, onlyButton = false } = props
+    const { isInCart, cartLength, toyId, onlyButton = false } = props
     const { addToCart, removeFromCart } = props
 
     return isInCart ?
@@ -32,11 +32,12 @@ const CartAddButton = props => {
                 <Icon>remove_shopping</Icon>&nbsp;Remove</Button>
         </>
         :
-        <Button color="primary" onClick={() => { addToCart(toyId) }}><Icon>library_add</Icon>&nbsp;Add to Hopplist</Button>
+        <Button color="primary" disabled={cartLength >= 10} onClick={() => { addToCart(toyId) }}><Icon>library_add</Icon>&nbsp;Add to Hopplist</Button>
 }
 
 const mapStateToProps = (state, ownProps) => ({
     isInCart: !!(ownProps.toyId && state.cart[ownProps.toyId]),
+    cartLength: Object.keys(state.cart).length
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
