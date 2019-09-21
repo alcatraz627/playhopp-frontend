@@ -34,7 +34,6 @@
     "@babel/preset-env": "^7.4.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.6",
-    "dotenv": "^8.1.0",
     "react-hot-loader": "^4.12.11",
     "redux-devtools-extension": "^2.13.8",
     "webpack": "^4.33.0",
