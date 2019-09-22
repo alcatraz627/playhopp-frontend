@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react'
 
 import { connect } from 'react-redux'
+import axios from 'axios'
 
 import { apiCall, cartAdd, cartRemove } from '../actions'
-import { apiRoutes, API_DATA_TYPE, API_STATES, API_METHODS } from '../constants/api'
+import { apiUrl, apiRoutes, API_DATA_TYPE, API_STATES, API_METHODS } from '../constants/api'
 
 import { Button, Fab, Chip, TextField, InputAdornment, Paper, Select, FormControl, InputLabel, Input, MenuItem } from '@material-ui/core'
 import { Grid, Container, Divider, Avatar, Typography, Icon } from '@material-ui/core'
@@ -68,6 +69,9 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         flexWrap: 'wrap',
     },
+    filterChip: {
+        margin: '0 5px',
+    },
     paginator: {
         maxWidth: '500px',
         display: 'flex',
@@ -90,21 +94,25 @@ const Collection = props => {
 
 
     const [searchQuery, setSearchQuery] = useState("")
-
     const [hoverCard, setHoverCard] = useState(null)
     const [modalItem, setModalItem] = useState(null)
     const [categoryFilters, setCategoryFilters] = useState([])
+    const [categorySort, setCategorySort] = useState(null)
 
+    // Toys from store as an object to final to be displayed array
     // 1. obj to map
     let toysList = Object.values(toys)
 
     // 2. search
+    let searchCategories = e => [e.title, e.description, e.skills, e.playIdeas, categories[e.category].title, brands[e.brand].title]
     toysList = (searchQuery == '' || toysList.length == 0) ? toysList :
-        (toysList.filter(e => [e.title, categories[e.category].title].map(f => f.includes(searchQuery)).reduce((a, v) => (a || v), false)))
+        (toysList.filter(e => searchCategories(e).map(f => f.includes(searchQuery)).reduce((a, v) => (a || v), false))) //if any field matches, it will return a true else default to false
 
     // 3. filter & sort
     // TODO
-    // toysList = toysList
+    let categFiltered = Object.values(categories).filter(c => categoryFilters.includes(c.title)).map(c => c.id)
+    // console.log('categFiltered', categFiltered)
+    toysList = (categoryFilters.length == 0) ? toysList : toysList.filter(t => categFiltered.includes(t.category))
 
     // 4. paginate
     const ITEMS_PER_PAGE = 12; // TODO: Let users change
@@ -112,38 +120,32 @@ const Collection = props => {
     const maxPageNum = Math.floor(toysList.length / ITEMS_PER_PAGE);
     toysList = toysList.slice((pageNum) * ITEMS_PER_PAGE + 1, ((pageNum + 1) * ITEMS_PER_PAGE) + 1)
 
-    // [Old] Paginate code
-        // const ITEMS_PER_PAGE = 12;
-        // const [pageNum, setPageNum] = useState(0) //Starts with zero
+    // Reset Page Number on search and filter change
+    useEffect(() => { setPageNum(0) }, [searchQuery, categoryFilters,])
 
-        // let toysToDisplay = Object.values(toys).slice((pageNum) * ITEMS_PER_PAGE + 1, ((pageNum + 1) * ITEMS_PER_PAGE) + 1)
-        // let toysToDisplayFiltered = [];
-
-
-    // searchQuery !== '' && console.log(toysToDisplay.filter((
-    //     { title, description, skills, playIdeas, category, brand }) => [title, description, skills, playIdeas, categories[category].title, brands[brand].title]
-    //         .reduce((acc, val) => acc || val.includes(searchQuery), true)))
-
-        // toysToDisplayFiltered =
-        //     (searchQuery == '' || toysToDisplay.length == 0) ? toysToDisplay :
-        //         (toysToDisplay.filter(e => [e.title, categories[e.category].title].map(f => f.includes(searchQuery)).reduce((a, v) => (a || v), false)))
-    useEffect(() => {
-        setPageNum(0)
-    }, [searchQuery, categoryFilters, ])
-
-
+    // Handle the hook updation centrally from one method
     const handleMouseOver = (e) => (event) => { setHoverCard(e.id) }
-
     const handleMouseOut = (event) => { setHoverCard(null) }
-
     const handleModalOpen = id => event => { setModalItem(id) }
-
     const handleModalClose = event => { setModalItem(null) }
+    const handlePageNumChange = p => e => { setPageNum(p) }
+    const handleSearchQueryChange = e => { setSearchQuery(e.target.value) }
+    const handleFilterChange = e => { setCategoryFilters(e.target.value); console.log(e.target) }
 
-    const handlePageNumChange = p => e => {
-        setPageNum(p)
-        // (i==0) || ((i+1) == Math.floor(Object.keys(toys).length/10)) ||
-    }
+    const getCardImage = (id, k = 1) => (`${apiUrl}/media/toys/${id}/${k}.jpg`)
+    // style={{ backgroundColor: `url('https://dummyimage.com/600x400/000333/0011ff')` }}
+
+    // const getCardImage = (id, k = 1) => {
+    //     let imgUrl = `${apiUrl}/media/toys/${id}/${k}.jpg`
+    //     let fallBack = 'https://dummyimage.com/600x400/000333/0011ff'
+    //     let x = 'a';
+    //     axios.get(`${apiUrl}/media/toys/${id}/${k}.jpg`)
+    //         .then(resp => {
+    //             x = resp.status == 200 ? imgUrl : fallBack
+    //         })
+    //     return x;
+    // }
+
 
     const PaginatorComponent = () => (
         <div className={classes.paginator}>
@@ -155,50 +157,40 @@ const Collection = props => {
                 .map(i => <Button {...{ color: (pageNum == i) ? "secondary" : "default", variant: (pageNum == i) ? "contained" : "text" }} size="small" onClick={handlePageNumChange(i)} key={i}>{i + 1}</Button>)
             }
             <div className={classes.grow} />
-            <Button size="small" color="inherit" disabled={pageNum == maxPageNum} onClick={handlePageNumChange(maxPageNum)}>Last</Button>
+            <Button size="small" color="inherit" disabled={pageNum == maxPageNum} onClick={handlePageNumChange(maxPageNum)}>Last({maxPageNum + 1})</Button>
             <Button size="small" variant="contained" color="primary">&gt;</Button>
         </div>
     )
 
-
-    // - search
-    // - sort
-    // - filter
     return (
         <Container className={classes.root}>
             <Typography variant="h4">Browse Toys</Typography>
             {/* {Object.keys(toys).length > 0 && [...Array(Object.keys(toys).length/10)].map(i => <div>{i} |</div>)} */}
-            <pre style={{ color: 'red' }}>
-                Issues to fix:<br />
-                - Search is only searching on the current page and not the whole set<br />
-                - Filter and Sort are not working
-            </pre>
 
             <Grid container spacing={0} className={classes.searchResults}>
                 <Grid item xs={12}>
                     <Paper elevation={0} className={classes.queryBar}>
                         <Grid container spacing={4}>
-                            <Grid item xs={4}>
-                                <TextField fullWidth label="Search" variant="standard" color="primary" value={searchQuery} onChange={(e) => { setSearchQuery(e.target.value) }}
+                            <Grid item sm={12} md={4}>
+                                <TextField fullWidth label="Search" variant="standard" color="primary" value={searchQuery} onChange={handleSearchQueryChange}
                                     placeholder="Search" InputProps={{ startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment> }} />
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item sm={12} md={4}>
                                 <FormControl fullWidth>
-                                    <InputLabel>Filter By Category</InputLabel>
-
-                                    <Select fullWidth multiple value={categoryFilters} input={<Input id="select-category"
-                                        startAdornment={<InputAdornment position="start"><Icon>sort</Icon></InputAdornment>} />}
-                                        renderValue={selected => <div className={classes.filterChips}>{categoryFilters.map(e => <Chip key={e} label={e} />)}</div>}
-                                    >
+                                    <InputLabel htmlFor="select-category">Filter By Category</InputLabel>
+                                    <Select fullWidth multiple value={categoryFilters}
+                                        input={<Input id="select-category" onChange={handleFilterChange}
+                                            startAdornment={<InputAdornment position="start"><Icon>filter_list</Icon></InputAdornment>}
+                                        />} renderValue={selected => <div className={classes.filterChips}>{categoryFilters.map(e => <Chip key={e} label={e} className={classes.filterChip} />)}</div>}>
                                         {Object.values(categories).map(e => e.title).map(e => <MenuItem key={e} value={e}>{e}</MenuItem>)}
                                     </Select>
                                 </FormControl>
                             </Grid>
-                            <Grid item xs={4}>
+                            <Grid item sm={12} md={4}>
                                 <FormControl fullWidth>
-                                    <InputLabel>Sort By Category</InputLabel>
-                                    <Select fullWidth multiple value={categoryFilters}
-                                        input={<Input id="select-category" startAdornment={<InputAdornment position="start"><Icon>filter_list</Icon></InputAdornment>} />}>
+                                    <InputLabel>Sort By [TODO]</InputLabel>
+                                    <Select fullWidth multiple value={[]}
+                                        input={<Input id="select-category" startAdornment={<InputAdornment position="start"><Icon>sort</Icon></InputAdornment>} />}>
                                         {Object.values(categories).map(e => e.title).map(e => <MenuItem key={e} value={e}>{e}</MenuItem>)}
                                     </Select>
                                 </FormControl>
@@ -214,7 +206,7 @@ const Collection = props => {
                 {toysList ? toysList.map(e => (
                     <Grid key={e.id} item xs={12} sm={12} md={4} lg={3} className={classes.cardContainer}>
                         <Card className={classes.card} onMouseOut={handleMouseOut} onMouseOver={handleMouseOver(e)} elevation={hoverCard == e.id ? 2 : 0}>
-                            <CardMedia className={classes.cardMedia} image={e.primaryImage || 'https://dummyimage.com/600x400/000333/0011ff'} title={e.title} />
+                            <CardMedia className={classes.cardMedia} title={e.title} image={getCardImage(e.id)} />
                             <Divider />
 
                             <CardHeader className={classes.cardHeader}

@@ -1,6 +1,6 @@
 import * as actions from '../actions'
 
-let apiUrl = (__MODE__ == 'development') ? `http://localhost:8000/api` : `http://13.127.132.188/api`
+export const apiUrl = (__MODE__ == 'development') ? `http://localhost:8000/api` : `http://13.127.132.188/api`
 
 export const apiRoutes = {
     TOYS: () => `${apiUrl}/toys/`,
