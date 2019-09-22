@@ -1,10 +1,6 @@
 import * as actions from '../actions'
 
-let apiUrl = (mode == 'development') ? `http://localhost:8000/api` : `http://13.127.132.188/api`
-// let apiUrl = `http://13.127.132.188/api`
-// let apiUrl = `http://localhost:8000/api`
-
-console.log(mode);
+let apiUrl = (__MODE__ == 'development') ? `http://localhost:8000/api` : `http://13.127.132.188/api`
 
 export const apiRoutes = {
     TOYS: () => `${apiUrl}/toys/`,
@@ -40,7 +36,6 @@ export const API_DATA_TYPE = {
     TOY: 'toy',
     TOYS: 'toys',
     USER: 'user',
-    USERS: 'users',
     LOGIN: 'login',
     SIGNUP: 'signup',
     BRANDS: 'brands',
@@ -53,7 +48,6 @@ export const API_DATA_TYPE_REDUCER = {
     [API_DATA_TYPE.BRANDS]: actions.addBrands,
     [API_DATA_TYPE.CATEGORIES]: actions.addCategories,
     [API_DATA_TYPE.USER]: actions.setUser,
-    [API_DATA_TYPE.USERS]: actions.setUsers,
 
     [API_DATA_TYPE.LOGIN]: actions.loginSuccess,
     [API_DATA_TYPE.SIGNUP]: actions.signupSuccess,

@@ -6,7 +6,7 @@ import { Container, Grid, Button, Typography, Tabs, Tab, Paper, TextField } from
 import { makeStyles } from '@material-ui/core/styles'
 import { red, grey } from '@material-ui/core/colors'
 
-import { apiCall, cartAdd, cartRemove } from '../actions'
+import { apiCall } from '../actions'
 import { apiRoutes, API_DATA_TYPE, API_STATES, API_METHODS } from '../constants/api'
 
 import { Link } from 'react-router-dom'

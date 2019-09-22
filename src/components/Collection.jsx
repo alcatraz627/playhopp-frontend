@@ -89,46 +89,56 @@ const Collection = props => {
     }, [apiStatus])
 
 
-    const ITEMS_PER_PAGE = 12;
-    const [pageNum, setPageNum] = useState(0) //Starts with zero
-    const maxPageNum = Math.floor(Object.keys(toys).length / ITEMS_PER_PAGE);
-
-    let toysToDisplay = Object.values(toys).slice((pageNum) * ITEMS_PER_PAGE + 1, ((pageNum + 1) * ITEMS_PER_PAGE) + 1)
-    let toysToDisplayFiltered = [];
     const [searchQuery, setSearchQuery] = useState("")
 
     const [hoverCard, setHoverCard] = useState(null)
     const [modalItem, setModalItem] = useState(null)
     const [categoryFilters, setCategoryFilters] = useState([])
 
-    // useEffect(() => {
+    // 1. obj to map
+    let toysList = Object.values(toys)
+
+    // 2. search
+    toysList = (searchQuery == '' || toysList.length == 0) ? toysList :
+        (toysList.filter(e => [e.title, categories[e.category].title].map(f => f.includes(searchQuery)).reduce((a, v) => (a || v), false)))
+
+    // 3. filter & sort
+    // TODO
+    // toysList = toysList
+
+    // 4. paginate
+    const ITEMS_PER_PAGE = 12; // TODO: Let users change
+    const [pageNum, setPageNum] = useState(0) //Starts with zero
+    const maxPageNum = Math.floor(toysList.length / ITEMS_PER_PAGE);
+    toysList = toysList.slice((pageNum) * ITEMS_PER_PAGE + 1, ((pageNum + 1) * ITEMS_PER_PAGE) + 1)
+
+    // [Old] Paginate code
+        // const ITEMS_PER_PAGE = 12;
+        // const [pageNum, setPageNum] = useState(0) //Starts with zero
+
+        // let toysToDisplay = Object.values(toys).slice((pageNum) * ITEMS_PER_PAGE + 1, ((pageNum + 1) * ITEMS_PER_PAGE) + 1)
+        // let toysToDisplayFiltered = [];
+
 
     // searchQuery !== '' && console.log(toysToDisplay.filter((
     //     { title, description, skills, playIdeas, category, brand }) => [title, description, skills, playIdeas, categories[category].title, brands[brand].title]
     //         .reduce((acc, val) => acc || val.includes(searchQuery), true)))
 
-    toysToDisplayFiltered =
-        (searchQuery == '' || toysToDisplay.length == 0) ? toysToDisplay :
-            (toysToDisplay.filter(e => [e.title, categories[e.category].title].map(f => f.includes(searchQuery)).reduce((a, v) => (a || v), false)))
+        // toysToDisplayFiltered =
+        //     (searchQuery == '' || toysToDisplay.length == 0) ? toysToDisplay :
+        //         (toysToDisplay.filter(e => [e.title, categories[e.category].title].map(f => f.includes(searchQuery)).reduce((a, v) => (a || v), false)))
+    useEffect(() => {
+        setPageNum(0)
+    }, [searchQuery, categoryFilters, ])
 
-    // }, [searchQuery])
 
+    const handleMouseOver = (e) => (event) => { setHoverCard(e.id) }
 
-    const handleMouseOver = (e) => (event) => {
-        setHoverCard(e.id)
-    }
+    const handleMouseOut = (event) => { setHoverCard(null) }
 
-    const handleMouseOut = (event) => {
-        setHoverCard(null)
-    }
+    const handleModalOpen = id => event => { setModalItem(id) }
 
-    const handleModalOpen = id => event => {
-        setModalItem(id)
-    }
-
-    const handleModalClose = event => {
-        setModalItem(null)
-    }
+    const handleModalClose = event => { setModalItem(null) }
 
     const handlePageNumChange = p => e => {
         setPageNum(p)
@@ -158,7 +168,7 @@ const Collection = props => {
         <Container className={classes.root}>
             <Typography variant="h4">Browse Toys</Typography>
             {/* {Object.keys(toys).length > 0 && [...Array(Object.keys(toys).length/10)].map(i => <div>{i} |</div>)} */}
-            <pre style={{color: 'red'}}>
+            <pre style={{ color: 'red' }}>
                 Issues to fix:<br />
                 - Search is only searching on the current page and not the whole set<br />
                 - Filter and Sort are not working
@@ -201,7 +211,7 @@ const Collection = props => {
 
                 </Grid>
 
-                {toysToDisplay ? toysToDisplayFiltered.map(e => (
+                {toysList ? toysList.map(e => (
                     <Grid key={e.id} item xs={12} sm={12} md={4} lg={3} className={classes.cardContainer}>
                         <Card className={classes.card} onMouseOut={handleMouseOut} onMouseOver={handleMouseOver(e)} elevation={hoverCard == e.id ? 2 : 0}>
                             <CardMedia className={classes.cardMedia} image={e.primaryImage || 'https://dummyimage.com/600x400/000333/0011ff'} title={e.title} />

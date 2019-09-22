@@ -26,5 +26,7 @@ export const SET_USER = createAction('user/set')
 export const LOGIN_SUCCESS = createAction('auth/login/success')
 export const LOGIN_FAIL = createAction('auth/login/fail')
 
+export const LOGOUT = createAction('auth/logout')
+
 export const SIGNUP_SUCCESS = createAction('auth/signup/success')
 export const SIGNUP_FAIL = createAction('auth/signup/fail')

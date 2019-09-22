@@ -23,6 +23,11 @@ export function* handleLoginFail({ payload }) {
     yield put(actionTypes.SET_NOTIF({ message: `Invalid Credentials` }))
 }
 
+export function* handleLogout({ payload }) {
+    yield call(history.push, routes.homepage)
+    yield put(actionTypes.SET_NOTIF({ message: `Logged out successfully` }))
+}
+
 export function* handleSignupSuccess({ payload }) {
     yield call(history.push, routes.homepage)
     setToken(payload.data.token)
@@ -37,6 +42,8 @@ export default function* root() {
     yield all([
         takeEvery(actionTypes.LOGIN_SUCCESS, handleLoginSuccess),
         takeEvery(actionTypes.LOGIN_FAIL, handleLoginFail),
+
+        takeEvery(actionTypes.LOGOUT, handleLogout),
 
         takeEvery(actionTypes.SIGNUP_SUCCESS, handleSignupSuccess),
         takeEvery(actionTypes.SIGNUP_FAIL, handleSignupFail),

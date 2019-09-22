@@ -25,6 +25,7 @@ import FAQ from './Static/FAQ';
 import Contact from './Static/Contact';
 
 import AuthComponent from './AuthComponent';
+import LogOut from './LogOut';
 import NotifBar from './shared/NotifBar';
 
 
@@ -41,6 +42,8 @@ const routeList = [
 
     { route: routes.signup, Component: AuthComponent },
     { route: routes.login, Component: AuthComponent },
+
+    { route: routes.logout, Component: LogOut },
 
 
     // Place all routes above this

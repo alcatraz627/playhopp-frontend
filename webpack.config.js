@@ -1,8 +1,7 @@
 const webpack = require('webpack')
 
 module.exports = (env, options) => {
-    console.log(options.mode)
-    let envKeys = {mode: `"${options.mode}"`}
+    let envKeys = {__MODE__: `"${options.mode}"`}
 
     return {
         entry: './src/index.js',

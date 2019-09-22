@@ -22,5 +22,7 @@ export const addCategories = data => actionTypes.ADD_CATEGORIES({data})
 export const loginSuccess = data => actionTypes.LOGIN_SUCCESS({data})
 export const loginFail = data => actionTypes.LOGIN_FAIL({data})
 
+export const logout = data => actionTypes.LOGOUT()
+
 export const signupSuccess = data => actionTypes.SIGNUP_SUCCESS({data})
 export const signupFail = data => actionTypes.SIGNUP_FAIL({data})
