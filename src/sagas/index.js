@@ -12,10 +12,8 @@ import { getToken } from './_helper'
 function* boot() {
     yield put(actionTypes.API_CALL({ route: apiRoutes.BRANDS(), dataType: API_DATA_TYPE.BRANDS }))
     yield put(actionTypes.API_CALL({ route: apiRoutes.CATEGORIES(), dataType: API_DATA_TYPE.CATEGORIES }))
-    // yield put(actionTypes.API_CALL({ route: apiRoutes.TOYS(), dataType: API_DATA_TYPE.TOYS }))
-    // yield put(actionTypes.SET_NOTIF({ message: "Henlo" }))
+    yield put(actionTypes.API_CALL({ route: apiRoutes.TOYS(), dataType: API_DATA_TYPE.TOYS }))
 
-    // Log in user
     let t = getToken()
     if (t) yield put(actionTypes.API_CALL({ route: apiRoutes.GET_USER(), dataType: API_DATA_TYPE.USER, method: API_METHODS.POST, data: { token: t } }))
 }

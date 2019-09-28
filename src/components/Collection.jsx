@@ -86,18 +86,10 @@ const Collection = props => {
     const { toys, apiStatus, brands, categories, cart } = props
     const { fetchToys, addToCart, removeFromCart } = props
 
-    useEffect(() => {
-        (apiStatus[API_DATA_TYPE.BRANDS] == API_STATES.FETCHED) &&
-            (apiStatus[API_DATA_TYPE.CATEGORIES] == API_STATES.FETCHED) &&
-            (apiStatus[API_DATA_TYPE.TOYS] == API_STATES.NOT_FETCHED) && fetchToys()
-    }, [apiStatus])
-
-
     const [searchQuery, setSearchQuery] = useState("")
     const [hoverCard, setHoverCard] = useState(null)
     const [modalItem, setModalItem] = useState(null)
     const [categoryFilters, setCategoryFilters] = useState([])
-    const [categorySort, setCategorySort] = useState(null)
 
     // Toys from store as an object to final to be displayed array
     // 1. obj to map
@@ -108,10 +100,8 @@ const Collection = props => {
     toysList = (searchQuery == '' || toysList.length == 0) ? toysList :
         (toysList.filter(e => searchCategories(e).map(f => f.includes(searchQuery)).reduce((a, v) => (a || v), false))) //if any field matches, it will return a true else default to false
 
-    // 3. filter & sort
-    // TODO
+    // 3. filter
     let categFiltered = Object.values(categories).filter(c => categoryFilters.includes(c.title)).map(c => c.id)
-    // console.log('categFiltered', categFiltered)
     toysList = (categoryFilters.length == 0) ? toysList : toysList.filter(t => categFiltered.includes(t.category))
 
     // 4. paginate
@@ -119,6 +109,7 @@ const Collection = props => {
     const [pageNum, setPageNum] = useState(0) //Starts with zero
     const maxPageNum = Math.floor(toysList.length / ITEMS_PER_PAGE);
     toysList = toysList.slice((pageNum) * ITEMS_PER_PAGE + 1, ((pageNum + 1) * ITEMS_PER_PAGE) + 1)
+
 
     // Reset Page Number on search and filter change
     useEffect(() => { setPageNum(0) }, [searchQuery, categoryFilters,])
@@ -170,7 +161,7 @@ const Collection = props => {
                 <Grid item xs={12}>
                     <Paper elevation={0} className={classes.queryBar}>
                         <Grid container spacing={4}>
-                            <Grid item sm={12} md={4}>
+                            <Grid item sm={12} md={8}>
                                 <TextField fullWidth label="Search" variant="standard" color="primary" value={searchQuery} onChange={handleSearchQueryChange}
                                     placeholder="Search" InputProps={{ startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment> }} />
                             </Grid>
@@ -181,15 +172,6 @@ const Collection = props => {
                                         input={<Input id="select-category" onChange={handleFilterChange}
                                             startAdornment={<InputAdornment position="start"><Icon>filter_list</Icon></InputAdornment>}
                                         />} renderValue={selected => <div className={classes.filterChips}>{categoryFilters.map(e => <Chip key={e} label={e} className={classes.filterChip} />)}</div>}>
-                                        {Object.values(categories).map(e => e.title).map(e => <MenuItem key={e} value={e}>{e}</MenuItem>)}
-                                    </Select>
-                                </FormControl>
-                            </Grid>
-                            <Grid item sm={12} md={4}>
-                                <FormControl fullWidth>
-                                    <InputLabel>Sort By [TODO]</InputLabel>
-                                    <Select fullWidth multiple value={[]}
-                                        input={<Input id="select-category" startAdornment={<InputAdornment position="start"><Icon>sort</Icon></InputAdornment>} />}>
                                         {Object.values(categories).map(e => e.title).map(e => <MenuItem key={e} value={e}>{e}</MenuItem>)}
                                     </Select>
                                 </FormControl>
@@ -217,6 +199,7 @@ const Collection = props => {
                                     <Typography variant="body1" className={classes.cardLikes}>
                                         <Icon>favorite</Icon> &nbsp; by {e.likes} people
                                     </Typography>
+                                    {/* <Typography variant="body2">Hopp Points: {e.points}</Typography> */}
                                 </div>
                                 <Chip label={categories[e.category].title} />
                             </CardContent>

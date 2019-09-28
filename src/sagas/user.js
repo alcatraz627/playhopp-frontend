@@ -7,7 +7,7 @@ import * as actionTypes from '../actions/actionTypes'
 
 import { apiResponse } from '../actions'
 
-import { API_STATES, API_DATA_TYPE, API_DATA_TYPE_REDUCER, API_METHODS, apiR } from '../constants/api'
+import { API_STATES, API_DATA_TYPE, API_DATA_TYPE_REDUCER, API_METHODS, apiRoutes } from '../constants/api'
 import routes from '../constants/routes'
 import { setToken, getToken, deleteToken } from './_helper.js'
 
@@ -16,8 +16,6 @@ export function* handleLoginSuccess({ payload }) {
     yield call(history.push, routes.homepage)
     setToken(payload.token)
     yield put(actionTypes.SET_NOTIF({ message: `Logged in as ${payload.email}` }))
-    // TODO: Fetch cart from server
-
 }
 
 // TODO: Color of notif
@@ -29,6 +27,7 @@ export function* handleLogout({ payload }) {
     yield call(history.push, routes.homepage)
     deleteToken()
     yield put(actionTypes.SET_NOTIF({ message: `Logged out successfully` }))
+    yield put(actionTypes.CART_EMPTY())
     // TODO: Empty cart
 }
 
@@ -42,6 +41,15 @@ export function* handleSignupFail({ payload }) {
     yield put(actionTypes.SET_NOTIF({ message: `Error. Please try refreshing the page.` }))
 }
 
+export function* handleUserSet({ payload }) {
+    console.log(payload)
+    // TODO: Fetch cart from server
+    yield put(actionTypes.API_CALL({ route: apiRoutes.HOPPLIST.CURRENT(), dataType: API_DATA_TYPE.HOPPLIST }))
+    // http://localhost:8000/api/hopplist/current/
+
+    // yield put(actionTypes.SET_NOTIF({ message: `Error. Please try refreshing the page.` }))
+}
+
 export default function* root() {
     yield all([
         takeEvery(actionTypes.LOGIN_SUCCESS, handleLoginSuccess),
@@ -51,5 +59,7 @@ export default function* root() {
 
         takeEvery(actionTypes.SIGNUP_SUCCESS, handleSignupSuccess),
         takeEvery(actionTypes.SIGNUP_FAIL, handleSignupFail),
+
+        takeEvery(actionTypes.SET_USER, handleUserSet),
     ])
 }

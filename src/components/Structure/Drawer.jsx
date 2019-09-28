@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 
-import {Link} from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 import { connect } from 'react-redux'
 import { toggleDrawer, cartRemove } from '../../actions'
 
-import { SwipeableDrawer, Typography, Divider, Grid, Button, Avatar, IconButton, Icon } from '@material-ui/core'
+import { SwipeableDrawer, Typography, Divider, Grid, Button, Avatar, IconButton, Icon, CircularProgress } from '@material-ui/core'
 import { List, ListItem, ListItemText, ListItemAvatar, ListItemSecondaryAction } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 import { red } from '@material-ui/core/colors'
@@ -56,19 +56,19 @@ const Drawer = props => {
                 <Divider className={classes.dividerTop} />
                 <List className={classes.list}>
                     {Object.values(props.cart.map(e => props.toys[e]))
-                        .map(e => (
+                        .map(e => e ? (
                             <ListItem button onClick={handleModalOpen(e.id)} dense alignItems="flex-start" key={e.id}>
                                 <ListItemAvatar><Avatar src={e.primaryImage} /></ListItemAvatar>
-                                <ListItemText primary={<Typography variant="body1">{e.title}</Typography>} secondary={`Hopp Points: `} />
+                                <ListItemText primary={<Typography variant="body1">{e.title}</Typography>} secondary={`Hopp Points: ${e.points}`} />
                                 <ListItemSecondaryAction>
                                     <IconButton onClick={() => { props.removeFromCart(e.id) }}><Icon color="error" variant="outlined">cancel</Icon></IconButton>
                                 </ListItemSecondaryAction>
                             </ListItem>
-                        ))}
+                        ) : <CircularProgress key={e} color="secondary" />)}
                 </List>
                 <Divider className={classes.dividerBottom} />
                 {/* <Button variant="contained" color="primary" disabled={props.cart.length < 10}>Proceed to Payment</Button> */}
-                <Link to={routes.placeorder} style={{textDecoration: 'none'}}><Button variant="contained" color="primary" onClick={() => props.toggleDrawer(false)} disabled={props.cart.length < 10}>Proceed to Payment</Button></Link>
+                <Link to={routes.placeorder} style={{ textDecoration: 'none' }}><Button variant="contained" color="primary" onClick={() => props.toggleDrawer(false)} disabled={props.cart.length < 10}>Proceed to Payment</Button></Link>
                 {(props.cart.length < 10) && <Typography variant="subtitle2" color="error">Please select {10 - props.cart.length} more items</Typography>}
             </div>
             {modalItem && <ToyModal toyId={modalItem} onClose={handleModalClose} />}

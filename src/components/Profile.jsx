@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 
 import cx from 'classnames'
 import { apiUrl } from '../constants/api'
+import routes from '../constants/routes'
 
 import { makeStyles } from '@material-ui/core/styles'
 import { Grid, Container, Button, Typography, TextField, Paper, Divider, Icon, IconButton } from '@material-ui/core'
@@ -105,8 +107,8 @@ const Profile = props => {
 
     let itemToRender = { ...navListItemDetails.profile, ...navListItemDetails.account }[selectedItem]
 
-    return <div>
-        <Container className={classes.root}>
+    return (!user.token) ? <Redirect to={{ pathname: routes.login }} /> :
+        (<Container className={classes.root}>
             <Grid container spacing={4}>
                 <Grid item md={3} sm={12}>
                     <Paper className={cx(classes.paperSpacing, classes.center)}>
@@ -132,7 +134,7 @@ const Profile = props => {
                 </Grid>
             </Grid>
         </Container>
-    </div>
+        )
 }
 
 const mapStateToProps = (state) => ({

@@ -13,7 +13,7 @@ export const setNotif = ({message}) => actionTypes.SET_NOTIF({message})
 
 export const setUser = (data) => actionTypes.SET_USER({data})
 
-export const apiCall = (params) => actionTypes.API_CALL(params)
+export const apiCall = ({route, dataType, method, data}) => actionTypes.API_CALL({route, dataType, method, data})
 export const apiResponse = ({dataType, responseType}) => actionTypes.API_CALL({dataType, responseType})
 
 export const addToys = data => actionTypes.ADD_TOYS({data})

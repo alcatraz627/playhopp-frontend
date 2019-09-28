@@ -12,6 +12,7 @@ import routes from '../constants/routes'
 import { setToken, getToken, deleteToken } from './_helper.js'
 
 
+// TODO: If user not logged in, don't sync cart with backend and wait for register and then sync
 export function* handleCardAdd({ payload }) {
     console.log(payload)
     let cart = yield select(state => state.cart)

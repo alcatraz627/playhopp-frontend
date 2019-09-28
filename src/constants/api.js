@@ -20,6 +20,7 @@ export const apiRoutes = {
     LOGIN: () => `${apiUrl}/token_login/`,
 
     HOPPLIST: {
+        CURRENT: () => `${apiUrl}/hopplist/current/`,
         LIST: () => `${apiUrl}/hopplist/`,
         ADD: () => `${apiUrl}/hopplist/add/`,
         REMOVE: () => `${apiUrl}/hopplist/remove/`,

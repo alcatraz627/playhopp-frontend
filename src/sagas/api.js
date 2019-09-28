@@ -29,10 +29,6 @@ export function* apiCall({ payload: { route, dataType, method, data } }) {
 
     (!['null', 'undefined', null, undefined].includes(token)) && (headers['Authorization'] = `Token ${token}`)
 
-    console.log("headers", headers)
-    console.log("h2", headers)
-    console.log("user", user)
-
     try {
 
         let config = {
@@ -41,7 +37,7 @@ export function* apiCall({ payload: { route, dataType, method, data } }) {
             headers,
             data: data || null,
         }
-        console.log('config', config)
+        // console.log('config', config)
         resp = yield call(axios, config)
 
         // if ([API_METHODS.POST, API_METHODS.PATCH, null].includes(method)) {
@@ -85,6 +81,7 @@ export function* apiCall({ payload: { route, dataType, method, data } }) {
             yield put(((responseType == API_STATES.FETCHED) ? actionTypes.SIGNUP_SUCCESS : actionTypes.SIGNUP_FAIL)({ ...resp.data }))
             break;
         case apiRoutes.HOPPLIST.ADD():
+        case apiRoutes.HOPPLIST.REMOVE():
             // yield put(actionTypes.CART_ADD({...resp.data}))
             break;
         default:

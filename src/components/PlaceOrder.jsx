@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 
 import { connect } from 'react-redux'
+import { Redirect } from 'react-router-dom'
+import routes from '../constants/routes'
+import { getCardImage } from '../constants/api'
 
 import { Container, Paper, Typography, Divider, Grid, Button, Avatar, IconButton, Icon, TextField, Badge } from '@material-ui/core'
 import { List, ListItem, ListItemText, ListItemAvatar, ListItemSecondaryAction } from '@material-ui/core'
@@ -22,7 +25,10 @@ const useStyles = makeStyles(theme => ({
     },
     card: {
         border: `1px solid ${grey[300]}`,
-    }
+    },
+    dFlex: {
+        display: 'flex'
+    },
 }))
 
 const PlaceOrder = props => {
@@ -38,13 +44,11 @@ const PlaceOrder = props => {
         setModalItem(null)
     }
 
-    let address = `H. No 60,
-Sector 33A,
-Chandigarh - 600036`
-
     const { cart, user, toys, brands, categories } = props
     const { removeFromCart, placeOrder } = props
 
+    // TODO: Fix redirecting away
+    // return (!user.token) ? <Redirect to={{ pathname: routes.login }} /> :
     return (
         <Container className={classes.root}>
             <br />
@@ -57,9 +61,13 @@ Chandigarh - 600036`
                             <Card className={classes.card} elevation={0}>
                                 <CardHeader subheader="Login" subheaderTypographyProps={{ color: "textPrimary", variant: "h5" }} />
                                 <CardContent>
-                                    <Typography variant="body1">
-                                        {user.first_name} | {user.email} <br /><Button color="primary">Switch Account</Button>
-                                    </Typography>
+                                    <Typography variant="h6">{user.first_name}</Typography>
+                                    <div className={classes.dFlex}>
+                                        <Icon fontSize="small" color="primary">email</Icon>&nbsp;&nbsp;<Typography variant="subtitle2">{user.username}</Typography>
+                                    </div>
+                                    <div className={classes.dFlex}>
+                                        <Icon fontSize="small" color="primary">phone</Icon>&nbsp;&nbsp;<Typography variant="body2">{user.contact_number}</Typography>
+                                    </div>
                                 </CardContent>
                             </Card>
                         </Grid>
@@ -71,11 +79,12 @@ Chandigarh - 600036`
                                         {Object.values(cart.map(e => toys[e]))
                                             .map((e, i) => (
                                                 <ListItem button onClick={handleModalOpen(e.id)} dense alignItems="flex-start" key={e.id}>
-                                                    <ListItemAvatar><Badge color="secondary" showZero badgeContent={i + 1} anchorOrigin={{ horizontal: "left", vertical: 'bottom' }} ><Avatar src={e.primaryImage} /></Badge></ListItemAvatar>
-                                                    <ListItemText primary={<Typography variant="body1">{e.title}</Typography>} secondary={`Hopp Points: `} />
-                                                    <ListItemSecondaryAction>
+                                                    {/* <ListItemAvatar><Badge color="secondary" showZero badgeContent={i + 1} ></Badge></ListItemAvatar> */}
+                                                    <ListItemAvatar><Avatar src={getCardImage(e.id)} /></ListItemAvatar>
+                                                    <ListItemText primary={<Typography variant="body1">{e.title}</Typography>} secondary={`Hopp Points: ${e.points}`} />
+                                                    {/* <ListItemSecondaryAction>
                                                         <IconButton onClick={() => { removeFromCart(e.id) }}><Icon color="error" variant="outlined">cancel</Icon></IconButton>
-                                                    </ListItemSecondaryAction>
+                                                    </ListItemSecondaryAction> */}
                                                 </ListItem>
                                             ))}
                                     </List>
@@ -83,7 +92,8 @@ Chandigarh - 600036`
                             </Card>
                         </Grid>
                         <Grid item md={6} sm={12}>
-                            <Button variant="contained" fullWidth color="primary" disabled={cart.length == 0} onClick={placeOrder}>Pay</Button>
+                            <Button variant="contained" fullWidth color="primary" disabled={cart.length != 10} onClick={placeOrder}>Pay</Button>
+                            {(cart.length < 10) && <Typography variant="subtitle2" color="error">Please select {10 - cart.length} more item{cart.length == 9 ? '' : 's'}</Typography>}
                         </Grid>
 
                     </Grid>
@@ -95,7 +105,7 @@ Chandigarh - 600036`
                                 <CardHeader subheader="Delivery Address" subheaderTypographyProps={{ color: "textPrimary", variant: "h5" }} />
                                 <CardContent>
                                     {/* <TextField disabled multiline fullWidth value={address} /> */}
-                                    <Typography variant="body2" component="pre">{address}</Typography>
+                                    <Typography variant="body2" component="pre">{user.address}</Typography>
                                     <br />
                                     <Button variant="outlined" color="primary">Edit Address</Button>
                                 </CardContent>
@@ -107,10 +117,14 @@ Chandigarh - 600036`
                                 <CardContent>
                                     <Typography variant="body2">
                                         Subscription Duration: <b>One Month</b> <Button color="primary">Change</Button> <br /><br />
-                                        <Divider /><br />
+                                    </Typography>
+                                    <Divider /><br />
+                                    <Typography variant="body2">
                                         Base charge <b>₹800/month</b> <br />
                                         GST <b>10%</b> <br /><br />
-                                        <Divider /><br />
+                                    </Typography>
+                                    <Divider /><br />
+                                    <Typography variant="body2">
                                         <b>Total Payable: ₹ 880/month</b>
                                     </Typography>
                                 </CardContent>

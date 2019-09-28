@@ -9,7 +9,7 @@ import { red, grey } from '@material-ui/core/colors'
 import { apiCall } from '../actions'
 import { apiRoutes, API_DATA_TYPE, API_STATES, API_METHODS } from '../constants/api'
 
-import { Link } from 'react-router-dom'
+import { Link, Redirect } from 'react-router-dom'
 import routes from '../constants/routes'
 
 const useStyles = makeStyles(theme => ({
@@ -74,6 +74,7 @@ const KEY_DETAILS = {
 const AuthComponent = props => {
     const classes = useStyles()
 
+    let { user } = props
     let { attemptLogin, attemptSignup } = props
 
     const [isRegister, setRegister] = useState(props.location.pathname == routes.signup)
@@ -97,35 +98,35 @@ const AuthComponent = props => {
         ; (isRegister ? attemptSignup : attemptLogin)(details)
     }
 
-
     return (
-        <Container maxWidth="sm" className={classes.root}>
+        (user.token) ? <Redirect to={{ pathname: routes.homepage }} /> :
+            <Container maxWidth="sm" className={classes.root}>
 
-            <Paper elevation={0} className={classes.paper}>
-                <form onSubmit={handleSubmit}>
-                    <Typography variant="h3" className={classes.title}>{isRegister ? "Sign Up" : "Log In"}</Typography>
-                    <br />
-                    {Object.keys(details).map(e => (
-                        <TextField className={classes.textField} fullWidth error={invalid[e]} type={KEY_DETAILS[e].type} value={details[e]} name={e}
-                            helperText={invalid[e] ? KEY_DETAILS[e].errMsg : null} label={KEY_DETAILS[e].title} key={e} onChange={handleTextChange} />
-                    ))}
-                    <br />
-                    <br />
-                    <br />
-                    <Button type="submit" fullWidth color="primary" variant="contained">{isRegister ? "Create Account" : "Log In"}</Button>
-                    <br />
-                    <br />
-                    <Typography variant="body2">{isRegister
-                        ? <>Already a member? <Link to={routes.login}>Log in</Link></>
-                        : <>Not a member? <Link to={routes.signup}>Create an account</Link></>}</Typography>
-                </form>
-            </Paper>
-        </Container>
+                <Paper elevation={0} className={classes.paper}>
+                    <form onSubmit={handleSubmit}>
+                        <Typography variant="h3" className={classes.title}>{isRegister ? "Sign Up" : "Log In"}</Typography>
+                        <br />
+                        {Object.keys(details).map(e => (
+                            <TextField className={classes.textField} fullWidth error={invalid[e]} type={KEY_DETAILS[e].type} value={details[e]} name={e}
+                                helperText={invalid[e] ? KEY_DETAILS[e].errMsg : null} label={KEY_DETAILS[e].title} key={e} onChange={handleTextChange} />
+                        ))}
+                        <br />
+                        <br />
+                        <br />
+                        <Button type="submit" fullWidth color="primary" variant="contained">{isRegister ? "Create Account" : "Log In"}</Button>
+                        <br />
+                        <br />
+                        <Typography variant="body2">{isRegister
+                            ? <>Already a member? <Link to={routes.login}>Log in</Link></>
+                            : <>Not a member? <Link to={routes.signup}>Create an account</Link></>}</Typography>
+                    </form>
+                </Paper>
+            </Container>
     )
 }
 
 const mapStateToProps = (state) => ({
-
+    user: state.user
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
