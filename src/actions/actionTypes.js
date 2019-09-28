@@ -4,6 +4,8 @@ import {createAction} from 'redux-starter-kit';
 export const CART_ADD = createAction('cart/add')
 export const CART_REMOVE = createAction('cart/remove')
 
+export const CART_FILL = createAction('cart/fill') // Fill multiple items at once, like when loading an existing hopplist
+export const CART_EMPTY = createAction('cart/empty')
 
 // App actions
 export const TOGGLE_DRAWER = createAction('general/cart_drawer/toggle')

@@ -11,7 +11,6 @@ const routes = {
     reviews: '/reviews',
     faq: '/faq',
 
-    // auth: 'auth',
     login: '/login',
     signup: '/signup',
     profile: '/profile',

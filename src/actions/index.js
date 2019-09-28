@@ -5,6 +5,9 @@ export { actionTypes };
 export const cartAdd = ({item}) => actionTypes.CART_ADD({item})
 export const cartRemove = ({item}) => actionTypes.CART_REMOVE({item})
 
+export const cartFill = ({toys}) => actionTypes.CART_FILL({toys})
+export const cartEmpty = () => actionTypes.CART_EMPTY()
+
 export const toggleDrawer = ({open}) => actionTypes.TOGGLE_DRAWER({open})
 export const setNotif = ({message}) => actionTypes.SET_NOTIF({message})
 

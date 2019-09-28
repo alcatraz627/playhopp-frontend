@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import axios from 'axios'
 
 import { apiCall, cartAdd, cartRemove } from '../actions'
-import { apiUrl, apiRoutes, API_DATA_TYPE, API_STATES, API_METHODS } from '../constants/api'
+import { getCardImage, apiRoutes, API_DATA_TYPE, API_STATES, API_METHODS } from '../constants/api'
 
 import { Button, Fab, Chip, TextField, InputAdornment, Paper, Select, FormControl, InputLabel, Input, MenuItem } from '@material-ui/core'
 import { Grid, Container, Divider, Avatar, Typography, Icon } from '@material-ui/core'
@@ -132,7 +132,6 @@ const Collection = props => {
     const handleSearchQueryChange = e => { setSearchQuery(e.target.value) }
     const handleFilterChange = e => { setCategoryFilters(e.target.value); console.log(e.target) }
 
-    const getCardImage = (id, k = 1) => (`${apiUrl}/media/toys/${id}/${k}.jpg`)
     // style={{ backgroundColor: `url('https://dummyimage.com/600x400/000333/0011ff')` }}
 
     // const getCardImage = (id, k = 1) => {

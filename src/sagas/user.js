@@ -16,6 +16,8 @@ export function* handleLoginSuccess({ payload }) {
     yield call(history.push, routes.homepage)
     setToken(payload.token)
     yield put(actionTypes.SET_NOTIF({ message: `Logged in as ${payload.email}` }))
+    // TODO: Fetch cart from server
+
 }
 
 // TODO: Color of notif
@@ -25,7 +27,9 @@ export function* handleLoginFail({ payload }) {
 
 export function* handleLogout({ payload }) {
     yield call(history.push, routes.homepage)
+    deleteToken()
     yield put(actionTypes.SET_NOTIF({ message: `Logged out successfully` }))
+    // TODO: Empty cart
 }
 
 export function* handleSignupSuccess({ payload }) {

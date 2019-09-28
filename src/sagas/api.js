@@ -7,6 +7,7 @@ import { apiResponse } from '../actions'
 
 import { API_STATES, API_DATA_TYPE, API_DATA_TYPE_REDUCER, API_METHODS, apiRoutes } from '../constants/api'
 import routes from '../constants/routes'
+import { getToken } from './_helper'
 
 axios.interceptors.response.use(response => response, error => error.response)
 
@@ -19,18 +20,35 @@ const requestMethod = {
 
 
 export function* apiCall({ payload: { route, dataType, method, data } }) {
-    let header, responseType, resp;
-    // console.log('From Saga', route, dataType);
-    // (user.authStatus == AUTH_STATUS.LOGGED_IN) && (headers['Authorization'] = `HOGWORTS ${user.access}`);
+    let user = yield select(state => state.user)
+    let headers = {}
+    let responseType
+    let resp
+
+    let token = user.token || getToken();
+
+    (!['null', 'undefined', null, undefined].includes(token)) && (headers['Authorization'] = `Token ${token}`)
+
+    console.log("headers", headers)
+    console.log("h2", headers)
+    console.log("user", user)
+
     try {
-        console.info("Le method", method, method || API_METHODS.GET, route, data)
-        resp = yield call(
-            requestMethod[method || API_METHODS.GET],
-            // requestMethod.POST,
-            route, // url generated with all the url params
-            [API_METHODS.POST, API_METHODS.PATCH, null].includes(method) ? data : null,
-            // { headers }
-        );
+
+        let config = {
+            method: (method || API_METHODS.GET).toLowerCase(),
+            url: route,
+            headers,
+            data: data || null,
+        }
+        console.log('config', config)
+        resp = yield call(axios, config)
+
+        // if ([API_METHODS.POST, API_METHODS.PATCH, null].includes(method)) {
+        //     resp = yield call(requestMethod[method || API_METHODS.GET], route, data || null, { headers })
+        // } else {
+        //     resp = yield call(requestMethod[method || API_METHODS.GET], route, { headers })
+        // }
 
         console.info('resp', resp)
 
@@ -61,17 +79,18 @@ export function* apiCall({ payload: { route, dataType, method, data } }) {
     }))
     switch (route) {
         case apiRoutes.LOGIN():
-            yield put(((responseType == API_STATES.FETCHED) ? actionTypes.LOGIN_SUCCESS : actionTypes.LOGIN_FAIL)({...resp.data}))
+            yield put(((responseType == API_STATES.FETCHED) ? actionTypes.LOGIN_SUCCESS : actionTypes.LOGIN_FAIL)({ ...resp.data }))
             break;
         case apiRoutes.SIGNUP():
-            yield put(((responseType == API_STATES.FETCHED) ? actionTypes.SIGNUP_SUCCESS : actionTypes.SIGNUP_FAIL)({...resp.data}))
+            yield put(((responseType == API_STATES.FETCHED) ? actionTypes.SIGNUP_SUCCESS : actionTypes.SIGNUP_FAIL)({ ...resp.data }))
+            break;
+        case apiRoutes.HOPPLIST.ADD():
+            // yield put(actionTypes.CART_ADD({...resp.data}))
             break;
         default:
-        yield put(API_DATA_TYPE_REDUCER[route, dataType](resp.data))
+            yield put(API_DATA_TYPE_REDUCER[dataType](resp.data))
             break;
     }
-
-    // yield put(API_DATA_TYPE_REDUCER[route, dataType](resp.data))
 
 }
 

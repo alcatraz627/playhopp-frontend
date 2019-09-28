@@ -3,9 +3,6 @@ import Slider from 'react-slick'
 
 import classnames from 'classnames'
 
-import "slick-carousel/slick/slick.css"
-import "slick-carousel/slick/slick-theme.css"
-
 import { Typography, Container, Grid, Divider } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 

@@ -15,7 +15,15 @@ module.exports = (env, options) => ({
                 use: [
                     'style-loader',
                     'css-loader',
-                    'sass-loader',
+                    {
+                        loader: 'sass-loader',
+                        options: {
+                            "includePaths": [
+                                // To be able to use @import "~/<lib...>" in scss files
+                                require('path').resolve(__dirname, 'node_modules'),
+                            ],
+                        },
+                    }
                 ]
             },
             {

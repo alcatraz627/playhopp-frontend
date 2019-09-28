@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { toggleDrawer } from '../../actions'
 
-import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Badge } from '@material-ui/core'
+import { AppBar, Toolbar, Typography, IconButton, Menu, MenuItem, Badge, Avatar, } from '@material-ui/core'
 import { AccountCircle, ShoppingBasket } from '@material-ui/icons'
 import { makeStyles } from '@material-ui/core/styles'
 
@@ -103,11 +103,11 @@ const Navbar = props => {
                 <Link to={routes.homepage}><div className={classes.logo} /></Link>
                 {navLinks.right.map(e => <NavLink key={e.title} route={e.route} title={e.title} />)}
                 <IconButton color="inherit" onClick={handleMenuOpen}>
-                    <AccountCircle />
+                    {user.profile_pic ? <Avatar imgProps={{width: 10}} src={user.profile_pic} /> : <AccountCircle />}
                 </IconButton>
                 <Menu anchorEl={anchorEl} keepMounted open={Boolean(anchorEl)} onClose={handleMenuClose} onClick={handleMenuClose}
                     transformOrigin={{ vertical: 'bottom', horizontal: 'right' }}>
-                    {navLinks.auth[user.token?'user':'guest'].map(e => <Link className={classes.menuLink} to={e.route} key={e.route}><MenuItem>{e.title}</MenuItem></Link>)}
+                    {navLinks.auth[user.token ? 'user' : 'guest'].map(e => <Link className={classes.menuLink} to={e.route} key={e.route}><MenuItem>{e.title}</MenuItem></Link>)}
                 </Menu>
                 <IconButton color="inherit" onClick={() => { toggleDrawer(true) }}>
                     <Badge invisible={cartLength == 0} color="secondary" badgeContent={cartLength}>

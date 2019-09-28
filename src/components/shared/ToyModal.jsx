@@ -5,18 +5,49 @@ import { Dialog, DialogActions, DialogContent, DialogTitle } from '@material-ui/
 import { Grid, Typography, Button, Chip } from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles'
 
+import Slider from 'react-slick'
+
+import { getCardImage } from '../../constants/api'
+
 import CartAddButton from './CartAddButton'
 
 const useStyles = makeStyles(theme => ({
     root: {
         maxWidth: '900px'
     },
+    carouselImageContainer: {
+        border: '4px solid #444',
+    },
+    carouselDots: {
+        width: '30px',
+        border: '1px dotted red',
+    },
+    carouselDotsContainer: {
+        border: '1px dashed green',
+        display: 'flex',
+        justifyContent: 'space-evenly',
+    }
+
 }))
 
 const ToyModal = props => {
+
+    const classes = useStyles()
+
     let { toyId, onClose } = props
     let { brand, category, toy } = props
-    const classes = useStyles()
+
+    const sliderSettings = {
+        autoplay: true,
+        dots: true,
+        infinite: true,
+        lazyLoad: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        // appendDots: dots => <div><ul className={classes.carouselDotsContainer}>{dots}</ul></div>,
+        // customPaging: i => <a className={classes.carouselDots}><img width="50px" src={getCardImage(toyId)} /></a>
+    }
 
     return toy ? (
         <Dialog open={toy !== null} onClose={onClose} classes={{ paper: classes.root }}>
@@ -26,7 +57,17 @@ const ToyModal = props => {
             <DialogContent>
                 <Grid container spacing={2}>
                     <Grid item sm={5}>
-                        <img src={toy.primaryImage || "https://dummyimage.com/600x400/000333/0011ff"} width="100%" />
+                        {/* <img src={getCardImage(toyId)} width="100%" /> */}
+                        <Slider {...sliderSettings} className={classes.carouselImageContainer}>
+                            {
+                                ["First", "Second", "Third"].map(e => <div key={e}>
+                                    <div>
+                                        <img src={getCardImage(toyId)} width="100%" />
+                                    </div>
+                                </div>)
+                            }
+                        </Slider>
+
                         <br />
                         <br />
                         <br />

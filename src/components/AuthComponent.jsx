@@ -94,8 +94,6 @@ const AuthComponent = props => {
     const handleSubmit = e => {
         e.preventDefault()
         setInvalid(Object.assign({}, ...Object.values(keysForForm).map(e => ({ [e]: !KEY_DETAILS[e].validator(details[e], details) }))));
-        // console.log(details, KEYS)
-        // console.log(details[KEYS.CONFIRM_PASSWORD], details[KEYS.PASSWORD], details[KEYS.CONFIRM_PASSWORD] == details[KEYS.PASSWORD])
         ; (isRegister ? attemptSignup : attemptLogin)(details)
     }
 

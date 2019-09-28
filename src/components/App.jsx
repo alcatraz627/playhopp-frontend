@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, lazy, Suspense } from 'react'
 // import _ from 'lodash'
 
 // import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import React, { useState } from 'react'
 import { Router, Route, Switch } from 'react-router-dom';
 
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import theme from '../styles/theme';
 import routes from '../constants/routes';
 
@@ -26,7 +27,24 @@ import Contact from './Static/Contact';
 
 import AuthComponent from './AuthComponent';
 import LogOut from './LogOut';
+import Profile from './Profile';
 import NotifBar from './shared/NotifBar';
+
+
+// const Navbar = React.lazy(() => import('./Structure/Navbar'))
+// const Footer = React.lazy(() => import('./Static/Footer'))
+// const Drawer = React.lazy(() => import('./Structure/Drawer'))
+// const HomePage = React.lazy(() => import('./HomePage'))
+// const Collection = React.lazy(() => import('./Collection'))
+// const Subscribe = React.lazy(() => import('./Subscribe'))
+// const PlaceOrder = React.lazy(() => import('./PlaceOrder'))
+// const Reviews = React.lazy(() => import('./Static/Reviews'))
+// const FAQ = React.lazy(() => import('./Static/FAQ'))
+// const Contact = React.lazy(() => import('./Static/Contact'))
+// const AuthComponent = React.lazy(() => import('./AuthComponent'))
+// const Profile = React.lazy(() => import('./Profile'))
+// const LogOut = React.lazy(() => import('./LogOut'))
+// const NotifBar = React.lazy(() => import('./shared/NotifBar'))
 
 
 import { history } from '../store'
@@ -43,6 +61,7 @@ const routeList = [
     { route: routes.signup, Component: AuthComponent },
     { route: routes.login, Component: AuthComponent },
 
+    { route: routes.profile, Component: Profile },
     { route: routes.logout, Component: LogOut },
 
 
@@ -50,10 +69,15 @@ const routeList = [
     { route: routes.homepage, Component: HomePage },
 ]
 
+// const Loading = () => <div style={{ width: '100%', textAlign: 'center', paddingTop: '35%' }}><CircularProgress color="primary" /></div>
+
 const App = (props) => {
+    // return <Loading />
     return (
         <MuiThemeProvider theme={theme}>
             <Router history={history}>
+                {/* <Suspense fallback={<Loading />}> */}
+
                 <Navbar />
                 <Drawer />
                 <Switch>
@@ -61,6 +85,7 @@ const App = (props) => {
                 </Switch>
                 <Footer />
                 <NotifBar />
+                {/* </Suspense> */}
             </Router>
         </MuiThemeProvider>
     )

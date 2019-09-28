@@ -1,6 +1,9 @@
 import * as actions from '../actions'
 
+// export const apiUrl =  `http://13.127.132.188/api`
 export const apiUrl = (__MODE__ == 'development') ? `http://localhost:8000/api` : `http://13.127.132.188/api`
+
+export const getCardImage = (id, k = 1) => (`${apiUrl}/media/toys/${id}/${k}.jpg`)
 
 export const apiRoutes = {
     TOYS: () => `${apiUrl}/toys/`,
@@ -15,6 +18,13 @@ export const apiRoutes = {
 
     SIGNUP: () => `${apiUrl}/customers/`,
     LOGIN: () => `${apiUrl}/token_login/`,
+
+    HOPPLIST: {
+        LIST: () => `${apiUrl}/hopplist/`,
+        ADD: () => `${apiUrl}/hopplist/add/`,
+        REMOVE: () => `${apiUrl}/hopplist/remove/`,
+        EMPTY: () => `${apiUrl}/hopplist/empty/`,
+    }
 }
 
 export const API_METHODS = {
@@ -33,21 +43,23 @@ export const API_STATES = {
 }
 
 export const API_DATA_TYPE = {
-    TOY: 'toy',
     TOYS: 'toys',
+    BRANDS: 'brands',
+    CATEGORIES: 'categories',
+
     USER: 'user',
     LOGIN: 'login',
     SIGNUP: 'signup',
-    BRANDS: 'brands',
-    CATEGORIES: 'categories',
+    HOPPLIST: 'hopplist',
+    CARTITEM: 'cartitem'
 }
 
 export const API_DATA_TYPE_REDUCER = {
     [API_DATA_TYPE.TOYS]: actions.addToys,
-    [API_DATA_TYPE.TOY]: actions.addToy,
     [API_DATA_TYPE.BRANDS]: actions.addBrands,
     [API_DATA_TYPE.CATEGORIES]: actions.addCategories,
     [API_DATA_TYPE.USER]: actions.setUser,
+    [API_DATA_TYPE.HOPPLIST]: actions.cartFill,
 
     [API_DATA_TYPE.LOGIN]: actions.loginSuccess,
     [API_DATA_TYPE.SIGNUP]: actions.signupSuccess,

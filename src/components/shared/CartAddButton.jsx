@@ -25,7 +25,7 @@ const CartAddButton = props => {
     return isInCart ?
         <>
             {!onlyButton && <Chip variant="outlined" color="primary" label="Added to cart" avatar={<Avatar><Icon>shopping_cart</Icon></Avatar>} />}
-            {onlyButton && <Avatar className={classes.avatar}><Icon color="default" fontSize="small">shopping_cart</Icon></Avatar>}
+            {onlyButton && <Avatar className={classes.avatar}><Icon color="inherit" fontSize="small">shopping_cart</Icon></Avatar>}
             <Button variant="outlined" color="secondary" onClick={() => { removeFromCart(toyId) }}
             // style={{ color: red[500], borderColor: red[500] }}
             >
