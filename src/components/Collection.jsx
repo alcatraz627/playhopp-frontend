@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 
 import { connect } from 'react-redux'
 import axios from 'axios'
+import cx from 'classnames'
+import _ from 'lodash'
 
 import { apiCall, cartAdd, cartRemove } from '../actions'
 import { getCardImage, apiRoutes, API_DATA_TYPE, API_STATES, API_METHODS } from '../constants/api'
@@ -11,7 +13,7 @@ import { Grid, Container, Divider, Avatar, Typography, Icon } from '@material-ui
 import { Card, CardContent, CardHeader, CardMedia, CardActions } from '@material-ui/core'
 
 import { makeStyles } from '@material-ui/core/styles'
-import { red, grey } from '@material-ui/core/colors'
+import { red, grey, green } from '@material-ui/core/colors'
 
 import CartAddButton from './shared/CartAddButton'
 import ToyModal from './shared/ToyModal'
@@ -24,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     searchResults: {
         marginTop: '30px',
         marginBottom: '30px',
-        backgroundColor: grey[200],
+        // backgroundColor: grey[200],
     },
     grow: {
         flexGrow: 1,
@@ -38,21 +40,42 @@ const useStyles = makeStyles(theme => ({
         minWidth: 300,
         height: '100%',
         // margin: '10px auto',
-        margin: 'auto'
+        margin: 'auto',
+        borderWidth: `1px`,
+        borderStyle: `solid`,
+        borderColor: grey[400],
+    },
+    cardSelected: {
+        borderColor: green[400],
+        // borderColor: theme.palette.primary.main,
+        // backgroundColor: theme.palette.primary.main,
     },
     cardHeader: {
-        height: '60px',
+        height: '35px',
         alignItems: 'flex-start',
     },
     cardBody: {
-        // height: '100px',
-        // alignItems: 'flex-start',
-        // padding: '0 0 20px',
+        display: 'flex'
+    },
+    cardBodyContent: {
+        width: '50%',
+        padding: '6px 0px',
+        borderRadius: '4px',
+        backgroundColor: `${theme.palette.primary.main}0f`,
+        alignItems: 'flex-end',
+        textAlign: 'center',
+        marginRight: '2.5%',
+        '&:nth-child(even)': {
+            marginRight: '0%',
+            marginLeft: '2.5%',
+        }
     },
     cardMedia: {
         height: 0,
-        paddingTop: '56.25%', // 16:9
+        // paddingTop: '56.25%', // 16:9
+        paddingTop: '80%',
         filter: 'grayscale(0.3)',
+        cursor: 'pointer',
     },
     cardAction: {
     },
@@ -60,6 +83,10 @@ const useStyles = makeStyles(theme => ({
         display: 'flex',
         color: red[500],
         padding: '10px 0',
+    },
+    hoppPoints: {
+        color: theme.palette.primary.main,
+        fontSize: theme.typography.h4.fontSize,
     },
     queryBar: {
         padding: '20px',
@@ -79,6 +106,45 @@ const useStyles = makeStyles(theme => ({
     }
 }))
 
+const SORT_OPTIONS = {
+    EMPTY: {
+        label: "None",
+        sorter: x => x
+    },
+    ALPHA_A: {
+        label: "Alphabetical | Ascending",
+        sorter: x => x.title[0]
+    },
+    ALPHA_D: {
+        label: "Alphabetical | Descending",
+        sorter: x => -1 * x.title[0]
+    },
+    MIN_AGE_A: {
+        label: "By min age | Ascending",
+        sorter: x => x.minAge
+    },
+    MIN_AGE_D: {
+        label: "By min age | Descending",
+        sorter: x => -1 * x.minAge
+    },
+    MAX_AGE_A: {
+        label: "By max age | Ascending",
+        sorter: x => x.maxAge
+    },
+    MAX_AGE_D: {
+        label: "By max age | Descending",
+        sorter: x => -1 * x.maxAge
+    },
+    HOPP_POINTS_A: {
+        label: "By hopp points | Ascending",
+        sorter: x => x.points
+    },
+    HOPP_POINTS_D: {
+        label: "By hopp points | Descending",
+        sorter: x => -1 * x.points
+    },
+}
+
 
 const Collection = props => {
     const classes = useStyles()
@@ -90,21 +156,38 @@ const Collection = props => {
     const [hoverCard, setHoverCard] = useState(null)
     const [modalItem, setModalItem] = useState(null)
     const [categoryFilters, setCategoryFilters] = useState([])
+    const [sortBy, setSortBy] = useState(SORT_OPTIONS.EMPTY)
 
+    // TODO: Fix search
     // Toys from store as an object to final to be displayed array
     // 1. obj to map
     let toysList = Object.values(toys)
 
     // 2. search
+    // TODO: Improve
+    // let searchCategories = e => [e.title, e.description, e.skills, e.playIdeas, categories[e.category].title, brands[e.brand].title]
+
     let searchCategories = e => [e.title, e.description, e.skills, e.playIdeas, categories[e.category].title, brands[e.brand].title]
     toysList = (searchQuery == '' || toysList.length == 0) ? toysList :
         (toysList.filter(e => searchCategories(e).map(f => f.includes(searchQuery)).reduce((a, v) => (a || v), false))) //if any field matches, it will return a true else default to false
+
+    // toysList[0] && console.log("SQ:", searchCategories(toysList[0]).map(f => [f, searchQuery, f.includes(searchQuery)]))
 
     // 3. filter
     let categFiltered = Object.values(categories).filter(c => categoryFilters.includes(c.title)).map(c => c.id)
     toysList = (categoryFilters.length == 0) ? toysList : toysList.filter(t => categFiltered.includes(t.category))
 
-    // 4. paginate
+    // 4. sort
+    // let categFiltered = Object.values(categories).filter(c => categoryFilters.includes(c.title)).map(c => c.id)
+    // toysList = toysList.sort(sortBy.sorter)
+    toysList = _.sortBy(toysList, sortBy.sorter)
+    // useEffect(() => {
+    //     // toysList = toysList.sort(sortBy.sorter)
+    //     toysList = ([...toysList].sort(sortBy.sorter))
+    //     console.log("Updated!", sortBy)
+    // }, [sortBy])
+
+    // 5. paginate
     const ITEMS_PER_PAGE = 12; // TODO: Let users change
     const [pageNum, setPageNum] = useState(0) //Starts with zero
     const maxPageNum = Math.floor(toysList.length / ITEMS_PER_PAGE);
@@ -119,9 +202,10 @@ const Collection = props => {
     const handleMouseOut = (event) => { setHoverCard(null) }
     const handleModalOpen = id => event => { setModalItem(id) }
     const handleModalClose = event => { setModalItem(null) }
-    const handlePageNumChange = p => e => { setPageNum(p) }
+    const handlePageNumChange = p => e => { setPageNum(Math.max(p, 0)) }
     const handleSearchQueryChange = e => { setSearchQuery(e.target.value) }
-    const handleFilterChange = e => { setCategoryFilters(e.target.value); console.log(e.target) }
+    const handleFilterChange = e => { setCategoryFilters(e.target.value) }
+    const handleSortChange = e => { setSortBy(Object.values(SORT_OPTIONS).filter(x => x.label == e.target.value)[0] ) }
 
     // style={{ backgroundColor: `url('https://dummyimage.com/600x400/000333/0011ff')` }}
 
@@ -139,21 +223,22 @@ const Collection = props => {
 
     const PaginatorComponent = () => (
         <div className={classes.paginator}>
-            <Button size="small" variant="contained" color="primary">&lt;</Button>
+            <Button size="small" variant="contained" color="primary" disabled={pageNum == 0} onClick={handlePageNumChange(pageNum - 1)}>&lt;</Button>
             <Button size="small" disabled={pageNum == 0} onClick={handlePageNumChange(0)}>First</Button>
             <div className={classes.grow} />
             {Object.keys(toys).length > 0 && [...Array(maxPageNum + 1).keys()]
-                .filter(i => (Math.abs(i - pageNum) < 3))
-                .map(i => <Button {...{ color: (pageNum == i) ? "secondary" : "default", variant: (pageNum == i) ? "contained" : "text" }} size="small" onClick={handlePageNumChange(i)} key={i}>{i + 1}</Button>)
+                .filter(i => (i > pageNum - 2 && Math.abs(i - pageNum) < 3))
+                .map(i => <Button size="small" onClick={handlePageNumChange(i)} key={i} 
+                    {...{ color: (pageNum == i) ? "secondary" : "default", variant: (pageNum == i) ? "contained" : "text" }}>{i + 1}</Button>)
             }
             <div className={classes.grow} />
             <Button size="small" color="inherit" disabled={pageNum == maxPageNum} onClick={handlePageNumChange(maxPageNum)}>Last({maxPageNum + 1})</Button>
-            <Button size="small" variant="contained" color="primary">&gt;</Button>
+            <Button size="small" variant="contained" color="primary" disabled={pageNum == maxPageNum} onClick={handlePageNumChange(pageNum + 1)}>&gt;</Button>
         </div>
     )
 
     return (
-        <Container className={classes.root}>
+        <Container className={classes.root} maxWidth="lg">
             <Typography variant="h4">Browse Toys</Typography>
             {/* {Object.keys(toys).length > 0 && [...Array(Object.keys(toys).length/10)].map(i => <div>{i} |</div>)} */}
 
@@ -161,15 +246,23 @@ const Collection = props => {
                 <Grid item xs={12}>
                     <Paper elevation={0} className={classes.queryBar}>
                         <Grid container spacing={4}>
-                            <Grid item sm={12} md={8}>
+                            <Grid item sm={12} md={6}>
                                 <TextField fullWidth label="Search" variant="standard" color="primary" value={searchQuery} onChange={handleSearchQueryChange}
                                     placeholder="Search" InputProps={{ startAdornment: <InputAdornment position="start"><Icon>search</Icon></InputAdornment> }} />
                             </Grid>
-                            <Grid item sm={12} md={4}>
+                            <Grid item sm={12} md={3}>
+                                <FormControl fullWidth>
+                                    <InputLabel htmlFor="select-category">Sort By</InputLabel>
+                                    <Select fullWidth value={sortBy.label} input={<Input id="select-category" onChange={handleSortChange}
+                                    startAdornment={<InputAdornment position="start"><Icon>sort</Icon></InputAdornment>}/>}>
+                                        {Object.values(SORT_OPTIONS).map(e => e.label).map(e => <MenuItem key={e} value={e}>{e}</MenuItem>)}
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item sm={12} md={3}>
                                 <FormControl fullWidth>
                                     <InputLabel htmlFor="select-category">Filter By Category</InputLabel>
-                                    <Select fullWidth multiple value={categoryFilters}
-                                        input={<Input id="select-category" onChange={handleFilterChange}
+                                    <Select fullWidth multiple value={categoryFilters} input={<Input id="select-category" onChange={handleFilterChange}
                                             startAdornment={<InputAdornment position="start"><Icon>filter_list</Icon></InputAdornment>}
                                         />} renderValue={selected => <div className={classes.filterChips}>{categoryFilters.map(e => <Chip key={e} label={e} className={classes.filterChip} />)}</div>}>
                                         {Object.values(categories).map(e => e.title).map(e => <MenuItem key={e} value={e}>{e}</MenuItem>)}
@@ -185,22 +278,37 @@ const Collection = props => {
                 </Grid>
 
                 {toysList ? toysList.map(e => (
-                    <Grid key={e.id} item xs={12} sm={12} md={4} lg={3} className={classes.cardContainer}>
-                        <Card className={classes.card} onMouseOut={handleMouseOut} onMouseOver={handleMouseOver(e)} elevation={hoverCard == e.id ? 2 : 0}>
-                            <CardMedia className={classes.cardMedia} title={e.title} image={getCardImage(e.id)} />
+                    <Grid key={e.id} item xs={12} sm={12} md={4} lg={4} className={classes.cardContainer}>
+                        <Card className={cx(classes.card, cart[e.id] && classes.cardSelected )} onMouseOut={handleMouseOut} onMouseOver={handleMouseOver(e)} elevation={hoverCard == e.id ? 2 : 0}>
+                            <CardMedia className={classes.cardMedia} title={e.title} image={getCardImage(e.id)}  onClick={handleModalOpen(e.id)} />
                             <Divider />
 
                             <CardHeader className={classes.cardHeader}
                                 // avatar={<Avatar>A</Avatar>}
-                                title={e.title} subheader={brands[e.brand].title} />
+                                // Truncate the title to 32 characters
+                                title={e.title.slice(0, 32)} subheader={brands[e.brand].title} titleTypographyProps={{variant: 'h6'}} />
                             <CardContent>
                                 <div className={classes.cardBody}>
 
-                                    <Typography variant="body1" className={classes.cardLikes}>
+                                    {/* <Typography variant="body1" className={classes.cardLikes}>
                                         <Icon>favorite</Icon> &nbsp; by {e.likes} people
-                                    </Typography>
+                                    </Typography> */}
                                     {/* <Typography variant="body2">Hopp Points: {e.points}</Typography> */}
+                                    <div className={classes.cardBodyContent}>
+                                        <Typography variant="caption">
+                                            {/* <span className={classes.hoppPoints}>{e.points} </span> */}
+                                            Hopp Point{e.points != 1 && "s"}
+                                        </Typography>
+                                        <Typography variant="h4" color="primary">{e.points}</Typography>
+                                    </div>
+                                    <div className={classes.cardBodyContent}>
+                                        <Typography variant="caption">Ages</Typography>
+                                        <Typography variant="h4" color="primary">{e.minAge} - {e.maxAge}</Typography>
+                                        {/* <Typography variant="body2">{categories[e.category].title}</Typography> */}
+                                        {/* <Chip label={categories[e.category].title} /> */}
                                 </div>
+                                </div>
+                                <br />
                                 <Chip label={categories[e.category].title} />
                             </CardContent>
                             <Divider />

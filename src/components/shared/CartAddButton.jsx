@@ -13,7 +13,16 @@ const useStyles = makeStyles(theme => ({
         // width: '20px',
         // height: '20px',
         transform: 'scale(0.8)'
-    }
+    },
+    removeButton: {
+        // backgroundColor: red[700], 
+        // color: 'white', 
+        color: red[500], 
+        borderColor: red[500],
+        '&:hover': {
+            borderColor: red[700],
+        }
+    },
 }))
 
 const CartAddButton = props => {
@@ -26,9 +35,7 @@ const CartAddButton = props => {
         <>
             {!onlyButton && <Chip variant="outlined" color="primary" label="Added to cart" avatar={<Avatar><Icon>shopping_cart</Icon></Avatar>} />}
             {onlyButton && <Avatar className={classes.avatar}><Icon color="inherit" fontSize="small">shopping_cart</Icon></Avatar>}
-            <Button variant="outlined" color="secondary" onClick={() => { removeFromCart(toyId) }}
-            // style={{ color: red[500], borderColor: red[500] }}
-            >
+            <Button variant="outlined" color="secondary" onClick={() => { removeFromCart(toyId) }} className={classes.removeButton}>
                 <Icon>remove_shopping</Icon>&nbsp;Remove</Button>
         </>
         :

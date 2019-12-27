@@ -7,7 +7,7 @@ import * as actionTypes from '../actions/actionTypes'
 
 import { apiResponse } from '../actions'
 
-import { API_STATES, API_DATA_TYPE, API_DATA_TYPE_REDUCER, API_METHODS, apiRoutes } from '../constants/api'
+import { API_STATES, API_DATA_TYPE, API_METHODS, apiRoutes } from '../constants/api'
 import routes from '../constants/routes'
 import { setToken, getToken, deleteToken } from './_helper.js'
 

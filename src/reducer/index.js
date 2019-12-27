@@ -7,6 +7,7 @@ import categories from './categories';
 import general from './general';
 import toys from './toys';
 import user from './user';
+import subscription from './subscription';
 
 const rootReducer = () => combineReducers({
     api,
@@ -16,6 +17,7 @@ const rootReducer = () => combineReducers({
     general,
     user,
     toys,
+    subscription,
 })
 
 export default rootReducer;

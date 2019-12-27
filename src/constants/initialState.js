@@ -8,6 +8,7 @@ const initialState = {
         [API_DATA_TYPE.USER]: API_STATES.NOT_FETCHED,
         [API_DATA_TYPE.HOPPLIST]: API_STATES.NOT_FETCHED,
         [API_DATA_TYPE.CARTITEM]: API_STATES.NOT_FETCHED,
+        [API_DATA_TYPE.SUBSCRIPTION]: API_STATES.NOT_FETCHED,
     },
     [API_DATA_TYPE.TOYS]: {},
 
@@ -25,7 +26,8 @@ const initialState = {
         first_name: null,
         address: null,
         profile_pic: null,
-    }
+    },
+    subscription: {},
 };
 
 export default initialState;

@@ -11,9 +11,9 @@ export const cartEmpty = () => actionTypes.CART_EMPTY()
 export const toggleDrawer = ({open}) => actionTypes.TOGGLE_DRAWER({open})
 export const setNotif = ({message}) => actionTypes.SET_NOTIF({message})
 
-export const setUser = (data) => actionTypes.SET_USER({data})
+export const setUser = (data, status) => actionTypes.SET_USER({data, status})
 
-export const apiCall = ({route, dataType, method, data}) => actionTypes.API_CALL({route, dataType, method, data})
+export const apiCall = ({route, dataType, method, data, auth}) => actionTypes.API_CALL({route, dataType, method, data, auth})
 export const apiResponse = ({dataType, responseType}) => actionTypes.API_CALL({dataType, responseType})
 
 export const addToys = data => actionTypes.ADD_TOYS({data})
@@ -29,3 +29,5 @@ export const logout = data => actionTypes.LOGOUT()
 
 export const signupSuccess = data => actionTypes.SIGNUP_SUCCESS({data})
 export const signupFail = data => actionTypes.SIGNUP_FAIL({data})
+
+export const submitSubscription = data => actionTypes.SUBMIT_SUBSCRIPTION({data})

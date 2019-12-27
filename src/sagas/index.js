@@ -5,6 +5,7 @@ import { apiRoutes, API_DATA_TYPE, API_METHODS } from '../constants/api'
 import api from './api'
 import user from './user'
 import cart from './cart'
+import subscription from './subscription'
 
 import { getToken } from './_helper'
 
@@ -25,5 +26,6 @@ export default function* root() {
         fork(api),
         fork(user),
         fork(cart),
+        fork(subscription),
     ])
 }

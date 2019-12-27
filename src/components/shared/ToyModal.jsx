@@ -15,8 +15,20 @@ const useStyles = makeStyles(theme => ({
     root: {
         maxWidth: '900px'
     },
+    itemContainer: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginBottom: '20px',
+    },
+    itemDesc: {
+        textAlign: 'center',
+        backgroundColor: `${theme.palette.primary.main}0f`,
+        width: '30%',
+        padding: '12px 0px',
+        borderRadius: '4px',
+    },
     carouselImageContainer: {
-        border: '4px solid #444',
+        border: `2px solid ${theme.palette.grey[400]}`,
     },
     carouselDots: {
         width: '30px',
@@ -51,12 +63,14 @@ const ToyModal = props => {
 
     return toy ? (
         <Dialog open={toy !== null} onClose={onClose} classes={{ paper: classes.root }}>
-            <DialogTitle>
-                About the Toy
+            <DialogTitle disableTypography>
+                <Typography variant="h5">{toy.title}</Typography>
+                <Typography color="textSecondary" variant="subtitle2">By: {brand}</Typography>
             </DialogTitle>
+
             <DialogContent>
-                <Grid container spacing={2}>
-                    <Grid item sm={5}>
+                <Grid container spacing={4}>
+                    <Grid item md={6} sm={12}>
                         {/* <img src={getCardImage(toyId)} width="100%" /> */}
                         <Slider {...sliderSettings} className={classes.carouselImageContainer}>
                             {
@@ -71,14 +85,33 @@ const ToyModal = props => {
                         <br />
                         <br />
                         <br />
-                        <Typography variant="subtitle1">Ages: {toy.minAge} to {toy.maxAge}</Typography>
+                        <div className={classes.itemContainer}>
+                        {/* <Grid container justify="space-evenly" spacing={3}> */}
+                            {/* <Grid item md={4} className={classes.itemDesc}> */}
+                            <div className={classes.itemDesc}>
+                                <Typography variant="body2">Hopp Points</Typography>
+                                <Typography variant="h4" color="primary">{toy.points}</Typography>
+                            </div>
+                            {/* </Grid> */}
+                            {/* <Grid item md={4} className={classes.itemDesc}> */}
+                            <div className={classes.itemDesc}>
+                                <Typography variant="body2">Age Group</Typography>
+                                <Typography variant="h4" color="primary">{toy.minAge} - {toy.maxAge}</Typography>
+                            </div>
+                            {/* </Grid> */}
+                            {/* <Grid item md={4} className={classes.itemDesc}> */}
+                            <div className={classes.itemDesc}>
+                                <Typography variant="body2">No. of Pieces</Typography>
+                                <Typography variant="h4" color="primary">{toy.piecesNumber}</Typography>
+                            </div>
+                            {/* </Grid> */}
+                        {/* </Grid> */}
+                        </div>
+                        {/* <Typography variant="subtitle1">Ages: {toy.minAge} to {toy.maxAge}</Typography> */}
+                        {/* <Chip label={`Number of Pieces: ${toy.piecesNumber}`} variant="outlined" /> */}
                         <Chip label={category} color="secondary" />&nbsp; &nbsp; &nbsp;
-                        <Chip label={`Number of Pieces: ${toy.piecesNumber}`} variant="outlined" />
                     </Grid>
-                    <Grid item sm={7}>
-                        <Typography variant="h4">{toy.title}</Typography>
-                        <Typography color="textSecondary" variant="subtitle2">By: {brand}</Typography>
-                        <br />
+                    <Grid item md={6} sm={12}>
                         <Typography variant="h6">About</Typography>
                         <Typography variant="body1">{toy.description}</Typography>
                         <br />

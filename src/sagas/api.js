@@ -19,7 +19,7 @@ const requestMethod = {
 }
 
 
-export function* apiCall({ payload: { route, dataType, method, data } }) {
+export function* apiCall({ payload: { route, dataType, method, data, auth = false } }) {
     let user = yield select(state => state.user)
     let headers = {}
     let responseType
@@ -27,7 +27,7 @@ export function* apiCall({ payload: { route, dataType, method, data } }) {
 
     let token = user.token || getToken();
 
-    (!['null', 'undefined', null, undefined].includes(token)) && (headers['Authorization'] = `Token ${token}`)
+    auth && (!['null', 'undefined', null, undefined].includes(token)) && (headers['Authorization'] = `Token ${token}`)
 
     try {
 
@@ -82,10 +82,11 @@ export function* apiCall({ payload: { route, dataType, method, data } }) {
             break;
         case apiRoutes.HOPPLIST.ADD():
         case apiRoutes.HOPPLIST.REMOVE():
-            // yield put(actionTypes.CART_ADD({...resp.data}))
+        // case apiRoutes.SUBSCRIPTION():
             break;
         default:
-            yield put(API_DATA_TYPE_REDUCER[dataType](resp.data))
+            // console.log(dataType)
+            yield put(API_DATA_TYPE_REDUCER[dataType](resp.data, resp.status))
             break;
     }
 

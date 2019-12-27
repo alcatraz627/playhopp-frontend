@@ -32,3 +32,5 @@ export const LOGOUT = createAction('auth/logout')
 
 export const SIGNUP_SUCCESS = createAction('auth/signup/success')
 export const SIGNUP_FAIL = createAction('auth/signup/fail')
+
+export const SUBMIT_SUBSCRIPTION = createAction('subscription/create')

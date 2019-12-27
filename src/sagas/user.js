@@ -7,7 +7,7 @@ import * as actionTypes from '../actions/actionTypes'
 
 import { apiResponse } from '../actions'
 
-import { API_STATES, API_DATA_TYPE, API_DATA_TYPE_REDUCER, API_METHODS, apiRoutes } from '../constants/api'
+import { API_STATES, API_DATA_TYPE, API_METHODS, apiRoutes } from '../constants/api'
 import routes from '../constants/routes'
 import { setToken, getToken, deleteToken } from './_helper.js'
 
@@ -16,6 +16,7 @@ export function* handleLoginSuccess({ payload }) {
     yield call(history.push, routes.homepage)
     setToken(payload.token)
     yield put(actionTypes.SET_NOTIF({ message: `Logged in as ${payload.email}` }))
+    yield put(actionTypes.API_CALL({ route: apiRoutes.HOPPLIST.CURRENT(), dataType: API_DATA_TYPE.HOPPLIST, auth: true }))
 }
 
 // TODO: Color of notif
@@ -42,12 +43,17 @@ export function* handleSignupFail({ payload }) {
 }
 
 export function* handleUserSet({ payload }) {
-    console.log(payload)
-    // TODO: Fetch cart from server
-    yield put(actionTypes.API_CALL({ route: apiRoutes.HOPPLIST.CURRENT(), dataType: API_DATA_TYPE.HOPPLIST }))
-    // http://localhost:8000/api/hopplist/current/
 
+    if (payload.status == 200) {
+        console.log("Logged in!")
+        yield put(actionTypes.API_CALL({ route: apiRoutes.HOPPLIST.CURRENT(), dataType: API_DATA_TYPE.HOPPLIST, auth: true }))
+    } else {
+        console.log("Failed to log in!")
+        deleteToken()
+    }
+    // http://localhost:8000/api/hopplist/current/
     // yield put(actionTypes.SET_NOTIF({ message: `Error. Please try refreshing the page.` }))
+
 }
 
 export default function* root() {

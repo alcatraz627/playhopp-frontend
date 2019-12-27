@@ -25,7 +25,8 @@ export const apiRoutes = {
         ADD: () => `${apiUrl}/hopplist/add/`,
         REMOVE: () => `${apiUrl}/hopplist/remove/`,
         EMPTY: () => `${apiUrl}/hopplist/empty/`,
-    }
+    },
+    SUBSCRIPTION: () => `${apiUrl}/subscription/`,
 }
 
 export const API_METHODS = {
@@ -52,7 +53,9 @@ export const API_DATA_TYPE = {
     LOGIN: 'login',
     SIGNUP: 'signup',
     HOPPLIST: 'hopplist',
-    CARTITEM: 'cartitem'
+    CARTITEM: 'cartitem',
+
+    SUBSCRIPTION: 'subscription',
 }
 
 export const API_DATA_TYPE_REDUCER = {
@@ -61,6 +64,7 @@ export const API_DATA_TYPE_REDUCER = {
     [API_DATA_TYPE.CATEGORIES]: actions.addCategories,
     [API_DATA_TYPE.USER]: actions.setUser,
     [API_DATA_TYPE.HOPPLIST]: actions.cartFill,
+    [API_DATA_TYPE.SUBSCRIPTION]: actions.submitSubscription,
 
     [API_DATA_TYPE.LOGIN]: actions.loginSuccess,
     [API_DATA_TYPE.SIGNUP]: actions.signupSuccess,
