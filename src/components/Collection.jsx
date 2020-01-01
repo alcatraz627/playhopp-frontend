@@ -17,6 +17,7 @@ import { red, grey, green } from '@material-ui/core/colors'
 
 import CartAddButton from './shared/CartAddButton'
 import ToyModal from './shared/ToyModal'
+import OnboardingModal from './shared/OnboardingModal'
 
 const useStyles = makeStyles(theme => ({
     root: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     },
     card: {
         maxWidth: 400,
-        minWidth: 300,
+        minWidth: 350,
         height: '100%',
         // margin: '10px auto',
         margin: 'auto',
@@ -58,17 +59,18 @@ const useStyles = makeStyles(theme => ({
         display: 'flex'
     },
     cardBodyContent: {
-        width: '50%',
+        width: '60%',
         padding: '6px 0px',
         borderRadius: '4px',
         backgroundColor: `${theme.palette.primary.main}0f`,
         alignItems: 'flex-end',
         textAlign: 'center',
-        marginRight: '2.5%',
-        '&:nth-child(even)': {
-            marginRight: '0%',
-            marginLeft: '2.5%',
-        }
+        margin: 'auto 20%',
+        // marginRight: '2.5%',
+        // '&:nth-child(even)': {
+        //     marginRight: '0%',
+        //     marginLeft: '2.5%',
+        // }
     },
     cardMedia: {
         height: 0,
@@ -149,14 +151,15 @@ const SORT_OPTIONS = {
 const Collection = props => {
     const classes = useStyles()
 
-    const { toys, apiStatus, brands, categories, cart } = props
+    const { toys, apiStatus, brands, categories, cart, user } = props
     const { fetchToys, addToCart, removeFromCart } = props
 
-    const [searchQuery, setSearchQuery] = useState("")
-    const [hoverCard, setHoverCard] = useState(null)
-    const [modalItem, setModalItem] = useState(null)
-    const [categoryFilters, setCategoryFilters] = useState([])
-    const [sortBy, setSortBy] = useState(SORT_OPTIONS.EMPTY)
+    const [searchQuery, setSearchQuery] = useState("") // Search query
+    const [hoverCard, setHoverCard] = useState(null) // Which card to hover on
+    const [modalItem, setModalItem] = useState(null) // Which toy to show in Toy Modal
+    const [showOnboardingModal, setShowOnboardingModal] = useState(false) // Which toy to show in Toy Modal
+    const [categoryFilters, setCategoryFilters] = useState([]) // List of category filters
+    const [sortBy, setSortBy] = useState(SORT_OPTIONS.EMPTY) // Which criteria to sort by
 
     // TODO: Fix search
     // Toys from store as an object to final to be displayed array
@@ -197,11 +200,19 @@ const Collection = props => {
     // Reset Page Number on search and filter change
     useEffect(() => { setPageNum(0) }, [searchQuery, categoryFilters,])
 
+    // Show onboard modal IF not logged in AND cart.length >= 2
+    useEffect(() => { 
+        console.log("Changed card", !user.token, Object.values(cart).length);
+        (!user.token && Object.values(cart).length > 0) && setShowOnboardingModal(true);
+        console.log(showOnboardingModal);
+    }, [cart,])
+
     // Handle the hook updation centrally from one method
     const handleMouseOver = (e) => (event) => { setHoverCard(e.id) }
     const handleMouseOut = (event) => { setHoverCard(null) }
-    const handleModalOpen = id => event => { setModalItem(id) }
-    const handleModalClose = event => { setModalItem(null) }
+    const handleToyModalOpen = id => event => { setModalItem(id) }
+    const handleToyModalClose = event => { setModalItem(null) }
+    const handleOnboardingModalClose = event => { setShowOnboardingModal(false) }
     const handlePageNumChange = p => e => { setPageNum(Math.max(p, 0)) }
     const handleSearchQueryChange = e => { setSearchQuery(e.target.value) }
     const handleFilterChange = e => { setCategoryFilters(e.target.value) }
@@ -239,7 +250,7 @@ const Collection = props => {
 
     return (
         <Container className={classes.root} maxWidth="lg">
-            <Typography variant="h4">Browse Toys</Typography>
+        <Typography variant="h4">Browse Toys{showOnboardingModal?"Y":"N"}</Typography>
             {/* {Object.keys(toys).length > 0 && [...Array(Object.keys(toys).length/10)].map(i => <div>{i} |</div>)} */}
 
             <Grid container spacing={0} className={classes.searchResults}>
@@ -280,7 +291,7 @@ const Collection = props => {
                 {toysList ? toysList.map(e => (
                     <Grid key={e.id} item xs={12} sm={12} md={4} lg={4} className={classes.cardContainer}>
                         <Card className={cx(classes.card, cart[e.id] && classes.cardSelected )} onMouseOut={handleMouseOut} onMouseOver={handleMouseOver(e)} elevation={hoverCard == e.id ? 2 : 0}>
-                            <CardMedia className={classes.cardMedia} title={e.title} image={getCardImage(e.id)}  onClick={handleModalOpen(e.id)} />
+                            <CardMedia className={classes.cardMedia} title={e.title} image={getCardImage(e.id)}  onClick={handleToyModalOpen(e.id)} />
                             <Divider />
 
                             <CardHeader className={classes.cardHeader}
@@ -296,17 +307,14 @@ const Collection = props => {
                                     {/* <Typography variant="body2">Hopp Points: {e.points}</Typography> */}
                                     <div className={classes.cardBodyContent}>
                                         <Typography variant="caption">
-                                            {/* <span className={classes.hoppPoints}>{e.points} </span> */}
                                             Hopp Point{e.points != 1 && "s"}
                                         </Typography>
                                         <Typography variant="h4" color="primary">{e.points}</Typography>
                                     </div>
-                                    <div className={classes.cardBodyContent}>
+                                    {/* <div className={classes.cardBodyContent}>
                                         <Typography variant="caption">Ages</Typography>
                                         <Typography variant="h4" color="primary">{e.minAge} - {e.maxAge}</Typography>
-                                        {/* <Typography variant="body2">{categories[e.category].title}</Typography> */}
-                                        {/* <Chip label={categories[e.category].title} /> */}
-                                </div>
+                                    </div> */}
                                 </div>
                                 <br />
                                 <Chip label={categories[e.category].title} />
@@ -314,7 +322,7 @@ const Collection = props => {
                             <Divider />
                             <CardActions className={classes.cardAction}>
                                 <CartAddButton toyId={e.id} onlyButton={true} />
-                                <Button variant="text" onClick={handleModalOpen(e.id)}>Learn More</Button>
+                                <Button variant="text" onClick={handleToyModalOpen(e.id)}>Learn More</Button>
                             </CardActions>
                         </Card>
                     </Grid>
@@ -323,8 +331,8 @@ const Collection = props => {
             {PaginatorComponent()}
             <br />
             <br />
-            {modalItem && <ToyModal toyId={modalItem} onClose={handleModalClose} />}
-
+            {modalItem && <ToyModal toyId={modalItem} onClose={handleToyModalClose} />}
+            {showOnboardingModal && <OnboardingModal open={showOnboardingModal} onClose={handleOnboardingModalClose}/>}
         </Container>
     )
 }
@@ -335,6 +343,7 @@ const mapStateToProps = (state, ownProps) => ({
     brands: state.brands,
     categories: state.categories,
     cart: state.cart,
+    user: state.user,
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

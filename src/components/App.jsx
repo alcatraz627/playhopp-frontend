@@ -8,10 +8,11 @@ import React, { useState, lazy, Suspense } from 'react'
 import { Router, Route, Switch } from 'react-router-dom';
 
 import { MuiThemeProvider } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 import theme from '../styles/theme';
 import routes from '../constants/routes';
 
+// > Develoment Version
 import Navbar from './Structure/Navbar';
 import Footer from './Static/Footer';
 import Drawer from './Structure/Drawer';
@@ -28,9 +29,13 @@ import Contact from './Static/Contact';
 import AuthComponent from './AuthComponent';
 import LogOut from './LogOut';
 import Profile from './Profile';
+
+import ForgotPass from './ForgotPass'
+
 import NotifBar from './shared/NotifBar';
 
-
+// > Production Version
+// import CircularProgress from '@material-ui/core/CircularProgress';
 // const Navbar = React.lazy(() => import('./Structure/Navbar'))
 // const Footer = React.lazy(() => import('./Static/Footer'))
 // const Drawer = React.lazy(() => import('./Structure/Drawer'))
@@ -44,8 +49,8 @@ import NotifBar from './shared/NotifBar';
 // const AuthComponent = React.lazy(() => import('./AuthComponent'))
 // const Profile = React.lazy(() => import('./Profile'))
 // const LogOut = React.lazy(() => import('./LogOut'))
+// const ForgotPass = React.lazy(() => import('./ForgotPass'))
 // const NotifBar = React.lazy(() => import('./shared/NotifBar'))
-
 
 import { history } from '../store'
 
@@ -64,6 +69,7 @@ const routeList = [
     { route: routes.profile, Component: Profile },
     { route: routes.logout, Component: LogOut },
 
+    { route: routes.forgotpass, Component: ForgotPass },
 
     // Place all routes above this
     { route: routes.homepage, Component: HomePage },
@@ -77,14 +83,13 @@ const App = (props) => {
         <MuiThemeProvider theme={theme}>
             <Router history={history}>
                 {/* <Suspense fallback={<Loading />}> */}
-
-                <Navbar />
-                <Drawer />
-                <Switch>
-                    {routeList.map(({ route, Component }) => <Route key={route} path={route} component={Component} />)}
-                </Switch>
-                <Footer />
-                <NotifBar />
+                    <Navbar />
+                    <Drawer />
+                    <Switch>
+                        {routeList.map(({ route, Component }) => <Route key={route} path={route} component={Component} />)}
+                    </Switch>
+                    <Footer />
+                    <NotifBar />
                 {/* </Suspense> */}
             </Router>
         </MuiThemeProvider>

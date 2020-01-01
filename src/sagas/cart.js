@@ -12,18 +12,34 @@ import routes from '../constants/routes'
 import { setToken, getToken, deleteToken } from './_helper.js'
 
 
-// TODO: If user not logged in, don't sync cart with backend and wait for register and then sync
+/**
+ * TODO: If user not logged in
+ * - Sync with localstorage instead of backend
+ * - Sync with backend once registered
+ */
+
 export function* handleCardAdd({ payload }) {
-    console.log(payload)
+    let user = yield select(state => state.user)
     let cart = yield select(state => state.cart)
     let cartLength = Object.keys(cart).length
-    if (cartLength > 9) yield put(actionTypes.SET_NOTIF({ message: `Please Proceed to Payment` }))
 
-    yield put(actionTypes.API_CALL({ route: apiRoutes.HOPPLIST.ADD(), dataType: API_DATA_TYPE.CARTITEM, method: API_METHODS.POST, data: { toy: payload.item } }))
+    if(user.token) {
+        if (cartLength > 9) yield put(actionTypes.SET_NOTIF({ message: `Please Proceed to Payment` }))
+        yield put(actionTypes.API_CALL({ route: apiRoutes.HOPPLIST.ADD(), dataType: API_DATA_TYPE.CARTITEM, method: API_METHODS.POST, data: { toy: payload.item } }))
+    } else {
+        // if (cartLength == 1) yield put(actionTypes.SET_NOTIF({ message: `Please Subscribe to buy` }))
+        // Add to localstorage
+    }
+    console.log(payload)
+
 }
 export function* handleCardRemove({ payload }) {
-
-    yield put(actionTypes.API_CALL({ route: apiRoutes.HOPPLIST.REMOVE(), dataType: API_DATA_TYPE.CARTITEM, method: API_METHODS.POST, data: { toy: payload.item } }))
+    let user = yield select(state => state.user)
+    if(user.token) {
+        yield put(actionTypes.API_CALL({ route: apiRoutes.HOPPLIST.REMOVE(), dataType: API_DATA_TYPE.CARTITEM, method: API_METHODS.POST, data: { toy: payload.item } }))
+    } else {
+        // Remove from localstorage
+    }
 }
 
 export default function* root() {

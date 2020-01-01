@@ -29,6 +29,14 @@ const useStyles = makeStyles(theme => ({
         margin: 'auto',
         textAlign: 'center',
     },
+    link: {
+        textDecoration: 'none',
+        color: theme.palette.primary.main,
+    },
+    forgotlink: {
+        // textDecoration: 'none',
+        color: grey[700]
+    }
 }))
 
 const KEYS = {
@@ -87,6 +95,7 @@ const AuthComponent = props => {
         setRegister(props.location.pathname == routes.signup)
     }, [props.location.pathname])
 
+    // TODO: Run valdiation after nonempty input changes
     const handleTextChange = ({ target: { name, value } }) => {
         setInvalid(Object.assign({}, ...Object.values(keysForForm).map(e => ({ [e]: false }))))
         setDetails({ ...details, [name]: value })
@@ -95,7 +104,8 @@ const AuthComponent = props => {
     const handleSubmit = e => {
         e.preventDefault()
         setInvalid(Object.assign({}, ...Object.values(keysForForm).map(e => ({ [e]: !KEY_DETAILS[e].validator(details[e], details) }))));
-        ; (isRegister ? attemptSignup : attemptLogin)(details)
+        // TODO: Make sure submit happens AFTER validation
+        !Object.values(invalid).reduce((acc, curr) => acc || curr, false) && (isRegister ? attemptSignup : attemptLogin)(details)
     }
 
     return (
@@ -117,8 +127,11 @@ const AuthComponent = props => {
                         <br />
                         <br />
                         <Typography variant="body2">{isRegister
-                            ? <>Already a member? <Link to={routes.login}>Log in</Link></>
-                            : <>Not a member? <Link to={routes.signup}>Create an account</Link></>}</Typography>
+                            ? <>Already a member? <Link to={routes.login} className={classes.link}>Log in</Link></>
+                            : <>Not a member? <Link to={routes.signup} className={classes.link}>Create an account</Link></>}</Typography>
+                        <Typography variant="body2" style={{}}>
+                            <Link to={routes.forgotpass} className={classes.forgotlink}>Forgot Password?</Link>
+                        </Typography>
                     </form>
                 </Paper>
             </Container>

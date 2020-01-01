@@ -17,7 +17,7 @@ const useStyles = makeStyles(theme => ({
     removeButton: {
         // backgroundColor: red[700], 
         // color: 'white', 
-        color: red[500], 
+        color: red[500],
         borderColor: red[500],
         '&:hover': {
             borderColor: red[700],
@@ -28,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 const CartAddButton = props => {
     const classes = useStyles()
 
-    const { isInCart, cartLength, toyId, onlyButton = false } = props
+    const { isInCart, cartLength, toyId, onlyButton = false, isLoggedIn } = props
     const { addToCart, removeFromCart } = props
 
     return isInCart ?
@@ -39,12 +39,13 @@ const CartAddButton = props => {
                 <Icon>remove_shopping</Icon>&nbsp;Remove</Button>
         </>
         :
-        <Button color="primary" disabled={cartLength >= 10} onClick={() => { addToCart(toyId) }}><Icon>library_add</Icon>&nbsp;Add to Hopplist</Button>
+        <Button color="primary" disabled={cartLength >= (isLoggedIn ? 10 : 1)} onClick={() => { addToCart(toyId) }}><Icon>library_add</Icon>&nbsp;{isLoggedIn ? "Add to Hopplist" : "Get it now"}</Button>
 }
 
 const mapStateToProps = (state, ownProps) => ({
     isInCart: !!(ownProps.toyId && state.cart[ownProps.toyId]),
-    cartLength: Object.keys(state.cart).length
+    cartLength: Object.keys(state.cart).length,
+    isLoggedIn: !!state.user.token
 })
 
 const mapDispatchToProps = (dispatch, ownProps) => ({

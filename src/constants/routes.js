@@ -16,6 +16,8 @@ const routes = {
     profile: '/profile',
     logout: '/logout',
 
+    forgotpass: '/forgotpass',
+
     admin: '/admin',
 }
 

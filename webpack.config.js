@@ -1,4 +1,5 @@
 const webpack = require('webpack')
+var HtmlWebpackPlugin = require('html-webpack-plugin')
 
 module.exports = (env, options) => ({
     entry: './src/index.js',
@@ -49,6 +50,12 @@ module.exports = (env, options) => ({
         new webpack.DefinePlugin({
             __MODE__: `"${options.mode}"`
         }),
+        new HtmlWebpackPlugin({
+            favicon: "./assets/logo.png",
+            template: "./dist/index.html",
+            minify: true,
+            showErrors: true
+        })
     ],
     output: {
         path: __dirname + '/dist',
